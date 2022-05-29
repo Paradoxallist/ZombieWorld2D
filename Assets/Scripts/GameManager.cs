@@ -16,14 +16,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<Enemy> enemies = new List<Enemy>();
     public GameObject EnemyGameObject;
     public PhotonView PV;
-    //public int Kek;
     public static GameManager Instance;
     public GameObject Spawner;
     float ttime;
 
     private void Start()
     {
-        //PhotonView = GetComponent<PhotonView>();
         if (Instance != this)
         {
             Destroy(Instance);
@@ -43,7 +41,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void Send(Enemy enemy)
     {
-        //if (players.Count > 0)
         if (PhotonNetwork.IsMasterClient)
         {
             
@@ -57,35 +54,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void SynchronizingDataPlayers(string gg)//List<Player> _players, List<Enemy> _enemies)
     {
-        /*for (int i = 0; i < _players.Count; i++)
-        {
-            foreach (Player player in players)
-            {
-                if (_players[i] != player)
-                    players.Add(player);
-            }
-        }
-        for (int i = 0; i < _enemies.Count; i++)
-        {
-            foreach (Enemy enemy in enemies)
-            {
-                if (_enemies[i] != enemy)
-                    enemies.Add(enemy);
-            }
-        }*/
         print("good");
     }
 
-    /*public void UpdateHpBarEnemies()
-    {
-        if (enemies.Count > 0)
-        {
-            foreach (Enemy enemy in enemies)
-            {
-                enemy.Alive();
-            }
-        }
-    }*/
     public void UpdateHpBarEnemy(Enemy enemy)
     {
         enemy.Alive();
@@ -111,38 +82,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         base.OnPlayerLeftRoom(otherPlayer);
     }
-
-    /*public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(players);
-            stream.SendNext(enemies);
-        }
-        else
-        {
-
-            List<Player> playersSynhronize = (List<Player>)stream.ReceiveNext();
-            for (int i = 0; i < playersSynhronize.Count; i++)
-            {
-                foreach (Player player in players)
-                {
-                    if (playersSynhronize[i] == player)
-                        players.Add(player);
-                }
-            }
-            List<Enemy> enemiesSynhronize = (List<Enemy>)stream.ReceiveNext();
-            for (int i = 0; i < enemiesSynhronize.Count; i++)
-            {
-                foreach (Enemy enemy in enemies)
-                {
-                    if (enemiesSynhronize[i] == enemy)
-                        enemies.Add(enemy);
-                }
-            }
-
-        }
-    }*/
 
     public void PushStart()
     {

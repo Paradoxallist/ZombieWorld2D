@@ -10,7 +10,6 @@ public class ManagerTestGame : MonoBehaviour
     public TMP_InputField inputField;
     public PhotonView PV;
 
-    // Start is called before the first frame update
     void Start()
     {
         //PhotonNetwork.InstantiateRoomObject()

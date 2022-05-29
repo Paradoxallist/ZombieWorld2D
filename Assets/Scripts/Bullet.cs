@@ -43,13 +43,6 @@ public class Bullet : MonoBehaviour
     public void DestroyHimself()
     {
         PhotonNetwork.Destroy(PV);
-        /*if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.Destroy(PV);
-        else
-        {
-            Destroy(PV);
-            PV.RPC("DestroyBullet", RpcTarget.MasterClient);
-        }*/
     }
     [PunRPC]
     public void DestroyBullet()
@@ -65,9 +58,7 @@ public class Bullet : MonoBehaviour
         }
         if (coll.tag == "Enemy")
         {
-            //if(e)
             Enemy enemy = coll.GetComponent<Enemy>();
-            //GameManager.Instance.UpdateHpBarEnemies();
             enemy.TakeDamage(damage);
             DestroyHimself();
         }
