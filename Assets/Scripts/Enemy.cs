@@ -47,11 +47,9 @@ public class Enemy : MonoBehaviour
                 SpriteChange(angel);
                 destinationSetter.target = victim;
         }
-        else
-        {
-            if (agr.victim != null)
-                victim = agr.victim.transform;
-        }
+        if (agr.victim != null)
+            victim = agr.victim.transform;
+        
         if (AttackSpeed < timeWithoutAttack && attackedPlayers.Count > 0)
         {
             foreach (var player in attackedPlayers)

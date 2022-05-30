@@ -8,9 +8,12 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour, IPunObservable
 {
     public float MaxHp;
+    public int LVLMaxHp;
     public float Hp;
     public float Damage;
+    public int LVLDamage;
     public float Speed;
+    public int LVLSpeed;
 
     public PhotonView photonView;
     private float angel;
@@ -22,6 +25,8 @@ public class Player : MonoBehaviour, IPunObservable
     public List<Sprite> Sprites;
     public SpriteRenderer spriteBody;
 
+    public int Score;
+
     public void StartPlayer()
     {
         NicknameText.text = (photonView.Owner.NickName);
@@ -32,6 +37,11 @@ public class Player : MonoBehaviour, IPunObservable
 
         hpBar.SetMaxHealth(MaxHp);
         Hp = MaxHp;
+        LVLMaxHp = 0;
+        LVLDamage = 0;
+        LVLSpeed = 0;
+        Score = 0;
+        GameManager.Instance.AddPlayer(this);
     }
 
     public void UpdatePlayer()
@@ -60,6 +70,17 @@ public class Player : MonoBehaviour, IPunObservable
         //transform.rotation = Quaternion.Euler(0, 0, angel - 90);
         //SpriteChange(angel);
     }*/
+
+    public void SendScore()
+    {
+        photonView.RPC("SetScore", RpcTarget.AllBuffered, Score);
+    }
+
+    [PunRPC]
+    public void SetScore(int _Score)
+    {
+        Score = _Score;
+    }
 
     public void SpriteChange(float _moveHorizontal, float _moveVertical)
     {

@@ -9,7 +9,7 @@ public class EnemyAgr : MonoBehaviour
     public bool agr = false;
     void Update()
     {
-        if(victim == null && agr)
+        //if(victim == null && !agr)
             SearchVictim();
     }
 
@@ -56,7 +56,9 @@ public class EnemyAgr : MonoBehaviour
             {
                 distanse = dist;
                 NearPlaer = player;
+                print("vic");
             }
+            print("ny");
         }
         if (NearPlaer != null)
         {

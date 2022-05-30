@@ -6,7 +6,8 @@ using TMPro;
 
 public class Zilot : Player
 {
-    // Start is called before the first frame update
+    
+
     void Start()
     {
         StartPlayer();
@@ -16,5 +17,10 @@ public class Zilot : Player
     void Update()
     {
         UpdatePlayer();
+    }
+
+    public void LevelUpStat(int NumStat)
+    {
+
     }
 }

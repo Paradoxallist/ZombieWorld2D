@@ -13,6 +13,7 @@ public class Bullet : MonoBehaviour
     public float Range;
     private float time;
     public PhotonView PV;
+    private Player player;
 
     void Start()
     {
@@ -30,7 +31,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void SetTargetPositon(Vector2 targetPos)
+    public void SetTargetPositon(Vector2 targetPos, Player _player)
     {
         Vector2 direction = (targetPos - (Vector2)transform.position).normalized;
         print(direction);
@@ -38,6 +39,7 @@ public class Bullet : MonoBehaviour
         targetPosition = direction * Range + (Vector2)transform.position;
         startPos = transform.position;
         isMove = true;
+        player = _player;   
     }
 
     public void DestroyHimself()
@@ -60,6 +62,11 @@ public class Bullet : MonoBehaviour
         {
             Enemy enemy = coll.GetComponent<Enemy>();
             enemy.TakeDamage(damage);
+            if (enemy == null || enemy.Hp <= 0)
+            {
+                player.Score++;
+            }
+            player.SendScore();
             DestroyHimself();
         }
     }

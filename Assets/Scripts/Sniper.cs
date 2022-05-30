@@ -4,17 +4,25 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 
-public class Sniper :  Player
+public class Sniper : Player
 {
     public GameObject BulletOb;
     public float delay;
     private float timeWitoutFire;
     private Vector3 bulletFuterPosition;
 
+    [SerializeField]
+    private SniperStats sniperStats;
+    private int lvl;
+
     void Start()
     {
-        StartPlayer();
         timeWitoutFire = 0;
+        lvl = 0;
+        Damage = sniperStats.SniperLevels[lvl].Damage;
+        MaxHp = sniperStats.SniperLevels[lvl].MaxHp;
+        Speed = sniperStats.SniperLevels[lvl].Speed;
+        StartPlayer();
     }
 
     // Update is called once per frame
@@ -40,6 +48,36 @@ public class Sniper :  Player
         //GameObject bulletGameoject = Instantiate(BulletOb.gameObject, transform.position, Quaternion.identity);
         Bullet b = bulletGameoject.GetComponent<Bullet>();
         b.damage = Damage;
-        b.SetTargetPositon(bulletFuterPosition);
+        b.SetTargetPositon(bulletFuterPosition, this);
+    }
+
+    public void LevelUpStat(int NumStat, TMP_Text textLevel)
+    {
+        switch (NumStat)
+        {
+            case 0:
+                if (LVLMaxHp < sniperStats.SniperLevels.Count)
+                {
+                    LVLMaxHp++;
+                    Hp += sniperStats.SniperLevels[LVLMaxHp].MaxHp - MaxHp;
+                    MaxHp = sniperStats.SniperLevels[LVLMaxHp].MaxHp;
+                }
+                break;
+            case 1:
+                if (LVLDamage < sniperStats.SniperLevels.Count)
+                {
+                    LVLDamage++;
+                    Damage = sniperStats.SniperLevels[LVLDamage].Damage;
+                    textLevel.text = "Level:" + (LVLDamage + 1);
+                }
+                break;
+            case 2:
+                LVLSpeed++;
+                if (LVLSpeed < sniperStats.SniperLevels.Count)
+                    Speed = sniperStats.SniperLevels[LVLSpeed].Speed;
+                break;
+            default:
+                break;
+        }
     }
 }

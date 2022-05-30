@@ -312,10 +312,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHp: 100
   Hp: 0
-  Damage: 0
+  Damage: 10
   Speed: 3
   photonView: {fileID: 8804289184067383971}
-  rb: {fileID: 0}
+  rb: {fileID: 1042905940}
   NicknameText: {fileID: 5706895490766960109}
   hpBar: {fileID: 2628174250245495395}
   Sprites:

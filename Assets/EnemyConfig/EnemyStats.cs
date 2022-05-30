@@ -15,12 +15,12 @@ public struct Level
 {
     public float Damage => damage;
     public float Hp => hp;
-    public float Speed => speed;
+    //public float Speed => speed;
 
     [SerializeField]
     private float damage;
     [SerializeField]
     private float hp;
-    [SerializeField]
-    private float speed;
+    //[SerializeField]
+    //private float speed;
 }

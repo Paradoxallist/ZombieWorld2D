@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -12,14 +13,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     public int NumClass;
     public float minX, minY, maxX, maxY;
 
-    //public List<Player> players = new List<Player>();
+    public List<Player> players = new List<Player>();
     public List<Enemy> enemies = new List<Enemy>();
     public GameObject EnemyGameObject;
     public PhotonView PV;
     public static GameManager Instance;
     public GameObject Spawner;
-    float ttime;
 
+    private Zilot MyZilot;
+    private Sniper MySniper;
+    public Player MyPlayer;
+
+    public PlayerTop Top;
+    public Transform StartVictim;
+    public Transform SpawnPosition;
+    
     private void Start()
     {
         if (Instance != this)
@@ -37,6 +45,12 @@ public class GameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LeaveRoom();
             PhotonNetwork.LoadLevel(1);
         }*/
+        Top.SetText(players);
+    }
+
+    public void AddPlayer(Player player)
+    {
+        players.Add(player);
     }
 
     public void Send(Enemy enemy)
@@ -98,19 +112,44 @@ public class GameManager : MonoBehaviourPunCallbacks
         Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
         GameObject PlayerOb = PhotonNetwork.Instantiate(create.name, randomPosition, Quaternion.identity);
         Camera.main.GetComponent<CameraControl>().target = PlayerOb.transform;
-        Player pl = PlayerOb.GetComponent<Player>();
-        //AppPlayer(pl);
-
+        MyPlayer = PlayerOb.GetComponent<Player>();
+        switch (NumClass)
+        {
+            case 0:
+                MyZilot = PlayerOb.GetComponent<Zilot>();
+                break;
+            case 1:
+                MySniper = PlayerOb.GetComponent<Sniper>();
+                break;
+            default:
+                break;
+        }
     }
 
     public void InstEnemy()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            Vector3 randomPosition = new Vector3(0, 0, 0);
-            GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyGameObject.name, randomPosition, Quaternion.identity);
+            Vector3 EnemyPosition = SpawnPosition.position;
+            GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
             Enemy enemy = en.GetComponent<Enemy>();
+            enemy.victim = StartVictim;
             enemies.Add(enemy);
+        }
+    }
+
+    public void LevelUpStats(int NumStat, TMP_Text LevelText)
+    {
+        switch (NumClass)
+        {
+            case 0:
+                MyZilot.LevelUpStat(NumStat);
+                break;
+            case 1:
+                MySniper.LevelUpStat(NumStat,LevelText);
+                break;
+            default:
+                break;
         }
     }
 }

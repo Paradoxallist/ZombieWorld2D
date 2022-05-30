@@ -579,9 +579,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHp: 50
+  LVLMaxHp: 0
   Hp: 0
   Damage: 25
+  LVLDamage: 0
   Speed: 3
+  LVLSpeed: 0
   photonView: {fileID: 77296916079093506}
   rb: {fileID: 8880398622318898933}
   NicknameText: {fileID: 4294229105767153029}
@@ -592,8 +595,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 194489a21426e8745bb9db8f6c285f95, type: 3}
   - {fileID: 21300000, guid: 63565b8b302eb0e47b9fde4716db4298, type: 3}
   spriteBody: {fileID: 8243897445695828407}
+  Score: 0
   BulletOb: {fileID: 5096200266444098278, guid: 1eb087e6095b1a94b8634085efa7bb1b, type: 3}
   delay: 1
+  sniperStats: {fileID: 11400000, guid: 67123f4fdca07384388f19aa3ee07599, type: 2}
 --- !u!61 &8647660317505982287
 BoxCollider2D:
   m_ObjectHideFlags: 0
