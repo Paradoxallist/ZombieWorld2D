@@ -10,6 +10,8 @@ public class Player : MonoBehaviour, IPunObservable
     public float MaxHp;
     public int LVLMaxHp;
     public float Hp;
+    public float HpRegen;
+    public float LVLRegen;
     public float Damage;
     public int LVLDamage;
     public float Speed;
@@ -17,15 +19,17 @@ public class Player : MonoBehaviour, IPunObservable
 
     public PhotonView photonView;
     private float angel;
-    [SerializeField]
-    private Rigidbody2D rb;
+
+    public Rigidbody2D rb;
 
     public Text NicknameText;
     public HpBar hpBar;
-    public List<Sprite> Sprites;
-    public SpriteRenderer spriteBody;
+    //public List<Sprite> Sprites;
+    public SpriteRenderer SriteBody; 
 
     public int Score;
+
+    public Animator animator;
 
     public void StartPlayer()
     {
@@ -38,6 +42,7 @@ public class Player : MonoBehaviour, IPunObservable
         hpBar.SetMaxHealth(MaxHp);
         Hp = MaxHp;
         LVLMaxHp = 0;
+        LVLRegen = 0;
         LVLDamage = 0;
         LVLSpeed = 0;
         Score = 0;
@@ -46,14 +51,34 @@ public class Player : MonoBehaviour, IPunObservable
 
     public void UpdatePlayer()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
         if (photonView.IsMine)
         {
-            Move(moveHorizontal, moveVertical);
-            SpriteChange(moveHorizontal, moveVertical);
+            Move(horizontal, vertical);
         }
+        Hp += HpRegen * Time.deltaTime;
+        if (Hp > MaxHp)
+            Hp = MaxHp;
         hpBar.SetHealth(Hp);
+
+        if (horizontal > 0)
+        {
+            Flip(false);
+        }
+        else if (horizontal < 0)
+        {
+            Flip(true);
+        }
+        bool move = false;
+        if (Mathf.Abs(horizontal) > 0 || Mathf.Abs(vertical) > 0)
+            move = true;
+        animator.SetBool("Move",move);
+    }
+
+    public void Flip(bool facing)
+    {
+        SriteBody.flipX = facing;
     }
 
     public void Move(float _moveHorizontal, float _moveVertical)
@@ -82,7 +107,7 @@ public class Player : MonoBehaviour, IPunObservable
         Score = _Score;
     }
 
-    public void SpriteChange(float _moveHorizontal, float _moveVertical)
+    /*public void SpriteChange(float _moveHorizontal, float _moveVertical)
     {
         if (_moveHorizontal > 0)
         {
@@ -100,7 +125,7 @@ public class Player : MonoBehaviour, IPunObservable
         {
             spriteBody.sprite = Sprites[3];
         }
-    }
+    }*/
 
     public void TakeDamage(float _damage)
     {

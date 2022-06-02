@@ -9,11 +9,13 @@ public class Sniper : Player
     public GameObject BulletOb;
     public float delay;
     private float timeWitoutFire;
-    private Vector3 bulletFuterPosition;
+    private Vector3 bulletFuturePosition;
 
     [SerializeField]
     private SniperStats sniperStats;
     private int lvl;
+
+    bool fire = false;
 
     void Start()
     {
@@ -35,20 +37,46 @@ public class Sniper : Player
             if (Input.GetMouseButton(0) && timeWitoutFire > delay)
             {
                 timeWitoutFire = 0;
-                Fire();
+                bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                bulletFuturePosition.z = transform.position.z;
+                if (transform.position.x < bulletFuturePosition.x)
+                {
+                    Flip(false);
+                }
+                else if (transform.position.x > bulletFuturePosition.x)
+                {
+                    Flip(true);
+                }
+                fire = true;
+                animator.SetBool("Fire", fire);
+                rb.bodyType = RigidbodyType2D.Static;
+            }
+            if(fire)
+            {
+                if (transform.position.x < bulletFuturePosition.x)
+                {
+                    Flip(false);
+                }
+                else if (transform.position.x > bulletFuturePosition.x)
+                {
+                    Flip(true);
+                }
             }
         }
     }
 
     private void Fire()
     {
-        bulletFuterPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        bulletFuterPosition.z = transform.position.z;
+        bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        bulletFuturePosition.z = transform.position.z;
         GameObject bulletGameoject = PhotonNetwork.Instantiate(BulletOb.name, transform.position, Quaternion.identity);
         //GameObject bulletGameoject = Instantiate(BulletOb.gameObject, transform.position, Quaternion.identity);
         Bullet b = bulletGameoject.GetComponent<Bullet>();
         b.damage = Damage;
-        b.SetTargetPositon(bulletFuterPosition, this);
+        b.SetTargetPositon(bulletFuturePosition, this);
+        fire = false;
+        animator.SetBool("Fire", fire);
+        rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
     public void LevelUpStat(int NumStat, TMP_Text textLevel)
@@ -79,5 +107,14 @@ public class Sniper : Player
             default:
                 break;
         }
+        photonView.RPC("SetDataCharacteristics", RpcTarget.AllBuffered, Hp, Damage, Speed);
+    }
+
+    [PunRPC]
+    public void SetDataCharacteristics(float _Hp, float _Damage, float _Speed)
+    {
+        Hp = _Hp;
+        Damage = _Damage;
+        Speed = _Speed;
     }
 }

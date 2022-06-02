@@ -39,7 +39,9 @@ public class Bullet : MonoBehaviour
         targetPosition = direction * Range + (Vector2)transform.position;
         startPos = transform.position;
         isMove = true;
-        player = _player;   
+        player = _player;
+        float angel = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angel);
     }
 
     public void DestroyHimself()

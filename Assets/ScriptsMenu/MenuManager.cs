@@ -18,7 +18,7 @@ public class MenuManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         listItems = new List<ListItem>();
-        PhotonNetwork.GameVersion = "0.00.003";
+        PhotonNetwork.GameVersion = "0.00.007";
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.JoinLobby();
     }

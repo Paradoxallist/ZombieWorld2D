@@ -48,6 +48,7 @@ MonoBehaviour:
   - DestroyBullet
   - SetHp
   - SetScore
+  - SetDataCharacteristics
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

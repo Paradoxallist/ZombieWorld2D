@@ -14,19 +14,21 @@ public class Enemy : MonoBehaviour
     private float timeWithoutAttack;
     public float Speed;
 
-    [SerializeField] private List<Sprite> Sprites;
-    public SpriteRenderer spriteRenderer;
+    //[SerializeField] private List<Sprite> Sprites;
+    //public SpriteRenderer spriteRenderer;
     private List<Player> attackedPlayers;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private AIPath aIPath;
-    [SerializeField] private AIDestinationSetter destinationSetter; 
-    public Transform victim;
+    [SerializeField] public AIDestinationSetter destinationSetter; 
+    //public Transform victim;
 
     public HpBar hpBar;
     public PhotonView PV;
     public EnemyAgr agr;
 
     public Text HP_Text;
+    public GameObject SriteBody;
+    private bool facing = true;
     public void StartEnemy()
     {
         //PhotonViewZ = GetComponent<PhotonView>();
@@ -40,48 +42,46 @@ public class Enemy : MonoBehaviour
     public void UpdateEnemy()
     {
         timeWithoutAttack += Time.deltaTime;
-        if (victim != null)
-        { 
-                Vector3 direction = victim.position - transform.position;
-                float angel = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                SpriteChange(angel);
-                destinationSetter.target = victim;
-        }
         if (agr.victim != null)
-            victim = agr.victim.transform;
-        
-        if (AttackSpeed < timeWithoutAttack && attackedPlayers.Count > 0)
         {
-            foreach (var player in attackedPlayers)
+            if (agr.victim.transform.position.x > transform.position.x && !facing)
+            {
+                Flip();
+            }
+            else if (agr.victim.transform.position.x < transform.position.x && facing)
+            {
+                Flip();
+            }
+            destinationSetter.target = agr.victim.transform;
+            
+        }
+        /*if (agr.victim != null)
+            victim = agr.victim.transform;*/
+        if (AttackSpeed < timeWithoutAttack && agr.victim != null)
+        {
+            if (Vector2.Distance(agr.victim.transform.position, transform.position) < 1.3f)
+            {
+                agr.victim.TakeDamage(Damage);
+                timeWithoutAttack = 0;
+            }
+            /*foreach (var player in attackedPlayers)
             {
                 if (Vector2.Distance(player.transform.position, transform.position) < 1f)
                     player.TakeDamage(Damage);
-            }
-            timeWithoutAttack = 0;
+            }*/
         }
         hpBar.SetHealth(Hp);
         HP_Text.text = Hp + "/" + MaxHp;
     }
 
-    private void SpriteChange(float _angel)
+    private void Flip()
     {
-        if (_angel > -45 && _angel < 45)
-        {
-            spriteRenderer.sprite = Sprites[0];
-        }
-        else if (_angel > 45 && _angel < 135)
-        {
-            spriteRenderer.sprite = Sprites[1];
-        }
-        else if (_angel > 135 && _angel < 225)
-        {
-            spriteRenderer.sprite = Sprites[2];
-        }
-        else
-        {
-            spriteRenderer.sprite = Sprites[3];
-        }
+        facing = !facing;
+        Vector3 theScale = SriteBody.transform.localScale;
+        theScale.x *= -1;
+        SriteBody.transform.localScale = theScale;
     }
+
     private void OnTriggerEnter2D(Collider2D coll)
     {
         /*if (coll.tag == "Bullet")

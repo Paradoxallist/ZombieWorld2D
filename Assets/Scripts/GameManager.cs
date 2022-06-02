@@ -132,8 +132,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             Vector3 EnemyPosition = SpawnPosition.position;
             GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
+            //GameObject en = PhotonNetwork.Instantiate(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
             Enemy enemy = en.GetComponent<Enemy>();
-            enemy.victim = StartVictim;
+            enemy.destinationSetter.target = StartVictim;
             enemies.Add(enemy);
         }
     }

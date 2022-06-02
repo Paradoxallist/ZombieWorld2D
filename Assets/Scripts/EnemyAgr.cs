@@ -56,9 +56,7 @@ public class EnemyAgr : MonoBehaviour
             {
                 distanse = dist;
                 NearPlaer = player;
-                print("vic");
             }
-            print("ny");
         }
         if (NearPlaer != null)
         {
