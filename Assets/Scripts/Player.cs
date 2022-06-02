@@ -5,7 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour, IPunObservable
+public abstract class Player : MonoBehaviour//, IPunObservable
 {
     public float MaxHp;
     public int LVLMaxHp;
@@ -16,6 +16,8 @@ public class Player : MonoBehaviour, IPunObservable
     public int LVLDamage;
     public float Speed;
     public int LVLSpeed;
+
+    public List<PlayerStat> Stats;
 
     public PhotonView photonView;
     private float angel;
@@ -88,6 +90,9 @@ public class Player : MonoBehaviour, IPunObservable
         //agent.SetDestination(nextPosition);
     }
 
+    public abstract void Attack();
+
+
     /*private void Rotate()
     {
         Vector3 direction = targetPosition - transform.position;    
@@ -107,26 +112,6 @@ public class Player : MonoBehaviour, IPunObservable
         Score = _Score;
     }
 
-    /*public void SpriteChange(float _moveHorizontal, float _moveVertical)
-    {
-        if (_moveHorizontal > 0)
-        {
-            spriteBody.sprite = Sprites[0];
-        }
-        else if (_moveHorizontal < 0)
-        {
-            spriteBody.sprite = Sprites[1];
-        }
-        else if (_moveVertical > 0)
-        {
-            spriteBody.sprite = Sprites[2];
-        }
-        else
-        {
-            spriteBody.sprite = Sprites[3];
-        }
-    }*/
-
     public void TakeDamage(float _damage)
     {
         Hp -= _damage;
@@ -142,7 +127,29 @@ public class Player : MonoBehaviour, IPunObservable
         }
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    private PlayerStat GetPlayerStat(StatType statType)
+    {
+        return Stats.First(stat => stat.StatType == statType);
+    }
+
+    public virtual void LevelUpStat(StatType statType)
+    {
+        PlayerStat playerStat = GetPlayerStat(statType);
+        playerStat.Update();
+        Damage = GetPlayerStat(StatType.Damage).Value;
+
+        photonView.RPC("SetDataCharacteristics", RpcTarget.AllBuffered, Hp, Damage, Speed);
+    }
+
+    [PunRPC]
+    public void SetDataCharacteristics(float _Hp, float _Damage, float _Speed)
+    {
+        Hp = _Hp;
+        Damage = _Damage;
+        Speed = _Speed;
+    }
+
+    /*public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
@@ -151,7 +158,7 @@ public class Player : MonoBehaviour, IPunObservable
         else
         {
             angel = (float)stream.ReceiveNext();
-            
+
         }
-    }
+    }*/
 }

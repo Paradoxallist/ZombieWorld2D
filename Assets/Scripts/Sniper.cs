@@ -65,10 +65,10 @@ public class Sniper : Player
         }
     }
 
-    private void Fire()
+    public override void Attack()
     {
-        bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        bulletFuturePosition.z = transform.position.z;
+        /*bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        bulletFuturePosition.z = transform.position.z;*/
         GameObject bulletGameoject = PhotonNetwork.Instantiate(BulletOb.name, transform.position, Quaternion.identity);
         //GameObject bulletGameoject = Instantiate(BulletOb.gameObject, transform.position, Quaternion.identity);
         Bullet b = bulletGameoject.GetComponent<Bullet>();
@@ -79,42 +79,17 @@ public class Sniper : Player
         rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
-    public void LevelUpStat(int NumStat, TMP_Text textLevel)
+    public override void LevelUpStat(StatType statType)
     {
-        switch (NumStat)
-        {
-            case 0:
-                if (LVLMaxHp < sniperStats.SniperLevels.Count)
-                {
-                    LVLMaxHp++;
-                    Hp += sniperStats.SniperLevels[LVLMaxHp].MaxHp - MaxHp;
-                    MaxHp = sniperStats.SniperLevels[LVLMaxHp].MaxHp;
-                }
-                break;
-            case 1:
-                if (LVLDamage < sniperStats.SniperLevels.Count)
-                {
-                    LVLDamage++;
-                    Damage = sniperStats.SniperLevels[LVLDamage].Damage;
-                    textLevel.text = "Level:" + (LVLDamage + 1);
-                }
-                break;
-            case 2:
-                LVLSpeed++;
-                if (LVLSpeed < sniperStats.SniperLevels.Count)
-                    Speed = sniperStats.SniperLevels[LVLSpeed].Speed;
-                break;
-            default:
-                break;
-        }
-        photonView.RPC("SetDataCharacteristics", RpcTarget.AllBuffered, Hp, Damage, Speed);
+        base.LevelUpStat(statType);
     }
 
+    /*
     [PunRPC]
     public void SetDataCharacteristics(float _Hp, float _Damage, float _Speed)
     {
         Hp = _Hp;
         Damage = _Damage;
         Speed = _Speed;
-    }
+    }*/
 }

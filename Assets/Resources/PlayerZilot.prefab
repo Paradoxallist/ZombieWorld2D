@@ -231,7 +231,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 9062536438370341409}
-  - {fileID: 1042905941}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -311,19 +310,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHp: 100
+  LVLMaxHp: 0
   Hp: 0
+  HpRegen: 0
+  LVLRegen: 0
   Damage: 10
+  LVLDamage: 0
   Speed: 3
+  LVLSpeed: 0
+  Stats:
+  - statType: 0
+    modifierType: 0
+    modifier: 0
+    value: 0
+    MaxLevel: 0
+  - statType: 0
+    modifierType: 0
+    modifier: 0
+    value: 0
+    MaxLevel: 0
+  - statType: 0
+    modifierType: 0
+    modifier: 0
+    value: 0
+    MaxLevel: 0
   photonView: {fileID: 8804289184067383971}
   rb: {fileID: 1042905940}
   NicknameText: {fileID: 5706895490766960109}
   hpBar: {fileID: 2628174250245495395}
-  Sprites:
-  - {fileID: 21300000, guid: d0791fe5a521efc459781a47a6ede1b4, type: 3}
-  - {fileID: 21300000, guid: a395b1ab970d88042b4af0da7cf2d667, type: 3}
-  - {fileID: 21300000, guid: a4f2381425b1f5c4f82c06b699249a74, type: 3}
-  - {fileID: 21300000, guid: 4ef2347516d15374abc6cba4a97ed9a6, type: 3}
-  spriteBody: {fileID: 672644326051144726}
+  SriteBody: {fileID: 0}
+  Score: 0
+  animator: {fileID: 0}
 --- !u!1 &672644326051144728
 GameObject:
   m_ObjectHideFlags: 0

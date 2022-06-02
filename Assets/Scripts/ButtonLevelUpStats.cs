@@ -14,6 +14,6 @@ public class ButtonLevelUpStats : MonoBehaviour
 
     public void Push(int NumStat)
     {
-        GameManager.Instance.LevelUpStats(NumStat,LevelText);
+        //GameManager.Instance.LevelUpStats(NumStat,LevelText);
     }
 }

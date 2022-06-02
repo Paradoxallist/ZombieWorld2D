@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static GameManager Instance;
     public GameObject Spawner;
 
-    private Zilot MyZilot;
-    private Sniper MySniper;
     public Player MyPlayer;
 
     public PlayerTop Top;
@@ -102,7 +100,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Inicilization(ClassPrefab[NumClass]);
     }
 
-    public void SetNumClass(int N)
+    public void SetNumClass(int N)///player player
     {
         NumClass = N;
     }
@@ -113,17 +111,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         GameObject PlayerOb = PhotonNetwork.Instantiate(create.name, randomPosition, Quaternion.identity);
         Camera.main.GetComponent<CameraControl>().target = PlayerOb.transform;
         MyPlayer = PlayerOb.GetComponent<Player>();
-        switch (NumClass)
-        {
-            case 0:
-                MyZilot = PlayerOb.GetComponent<Zilot>();
-                break;
-            case 1:
-                MySniper = PlayerOb.GetComponent<Sniper>();
-                break;
-            default:
-                break;
-        }
     }
 
     public void InstEnemy()
@@ -141,16 +128,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void LevelUpStats(int NumStat, TMP_Text LevelText)
     {
-        switch (NumClass)
-        {
-            case 0:
-                MyZilot.LevelUpStat(NumStat);
-                break;
-            case 1:
-                MySniper.LevelUpStat(NumStat,LevelText);
-                break;
-            default:
-                break;
-        }
+        
     }
 }

@@ -499,7 +499,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 502463203278571392}
-  - {fileID: 3238668538052879063}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -561,6 +560,22 @@ MonoBehaviour:
   LVLDamage: 0
   Speed: 3
   LVLSpeed: 0
+  Stats:
+  - statType: 0
+    modifierType: 0
+    modifier: 0
+    value: 0
+    MaxLevel: 0
+  - statType: 1
+    modifierType: 0
+    modifier: 15
+    value: 100
+    MaxLevel: 100
+  - statType: 2
+    modifierType: 0
+    modifier: 0
+    value: 0
+    MaxLevel: 0
   photonView: {fileID: 77296916079093506}
   rb: {fileID: 8880398622318898933}
   NicknameText: {fileID: 4294229105767153029}

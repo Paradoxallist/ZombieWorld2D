@@ -186,7 +186,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Sniper
+  m_text: Archer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2525,6 +2525,7 @@ GameObject:
   - component: {fileID: 385032836}
   - component: {fileID: 385032838}
   - component: {fileID: 385032837}
+  - component: {fileID: 385032839}
   m_Layer: 5
   m_Name: Store
   m_TagString: Untagged
@@ -2546,7 +2547,6 @@ RectTransform:
   m_Children:
   - {fileID: 1086603285}
   - {fileID: 465152773}
-  - {fileID: 1748133818}
   m_Father: {fileID: 1822808056}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2593,6 +2593,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385032835}
   m_CullTransparentMesh: 1
+--- !u!114 &385032839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385032835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72fdcfb0faf72794fa5e520494f3a479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &400778280
 GameObject:
   m_ObjectHideFlags: 0
@@ -5977,7 +5989,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Zilot
+  m_text: Swordsman
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7500,7 +7512,6 @@ GameObject:
   - component: {fileID: 1086603288}
   - component: {fileID: 1086603287}
   - component: {fileID: 1086603286}
-  - component: {fileID: 1086603289}
   m_Layer: 5
   m_Name: ButtonLevelUpAttack
   m_TagString: Untagged
@@ -7521,6 +7532,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1842186075}
+  - {fileID: 1748133818}
   m_Father: {fileID: 385032836}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7573,9 +7585,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1086603289}
-        m_TargetAssemblyTypeName: ButtonLevelUpStats, Assembly-CSharp
-        m_MethodName: Push
+      - m_Target: {fileID: 385032839}
+        m_TargetAssemblyTypeName: Store, Assembly-CSharp
+        m_MethodName: UpdateStat
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7623,19 +7635,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086603284}
   m_CullTransparentMesh: 1
---- !u!114 &1086603289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1086603284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 686098df539f26f479a7b537a306ff66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LevelText: {fileID: 1748133819}
 --- !u!1001 &1090850029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9439,6 +9438,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1687875537}
+        m_TargetAssemblyTypeName: ChooseHero, Assembly-CSharp
+        m_MethodName: Push
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Archer
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1559712237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10133,6 +10144,7 @@ GameObject:
   - component: {fileID: 1687875534}
   - component: {fileID: 1687875536}
   - component: {fileID: 1687875535}
+  - component: {fileID: 1687875537}
   m_Layer: 5
   m_Name: TextHeroName
   m_TagString: Untagged
@@ -10257,6 +10269,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687875533}
   m_CullTransparentMesh: 1
+--- !u!114 &1687875537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687875533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f86b444f7890334bada746161ea4632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1687875535}
 --- !u!1 &1721589595
 GameObject:
   m_ObjectHideFlags: 0
@@ -10358,17 +10383,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1748133817}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 385032836}
-  m_RootOrder: 2
+  m_Father: {fileID: 1086603285}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 249.99997, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1748133819
@@ -10605,6 +10630,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1687875537}
+        m_TargetAssemblyTypeName: ChooseHero, Assembly-CSharp
+        m_MethodName: Push
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Swordsman
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1799001892
@@ -12220,7 +12257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   On:
-  - {fileID: 335195265}
+  - {fileID: 2056024032}
   Off:
   - {fileID: 1437215432}
 --- !u!114 &2117952299
@@ -12267,6 +12304,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 326030356}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: PushStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 2117952298}
         m_TargetAssemblyTypeName: OnOff, Assembly-CSharp
         m_MethodName: Push

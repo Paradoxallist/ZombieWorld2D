@@ -1487,6 +1487,14 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3238668538052879063, guid: edb2131205f37e647811d54bfba326ce, type: 3}
+      propertyPath: Stats.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3238668538052879063, guid: edb2131205f37e647811d54bfba326ce, type: 3}
+      propertyPath: Stats.Array.data[0].modifier
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3772970366046559168, guid: edb2131205f37e647811d54bfba326ce, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1501,11 +1509,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8243897444245649245, guid: edb2131205f37e647811d54bfba326ce, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.72
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8243897444245649245, guid: edb2131205f37e647811d54bfba326ce, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -11.565
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8243897444245649245, guid: edb2131205f37e647811d54bfba326ce, type: 3}
       propertyPath: m_LocalPosition.z

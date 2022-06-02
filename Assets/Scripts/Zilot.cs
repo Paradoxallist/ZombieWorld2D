@@ -19,6 +19,11 @@ public class Zilot : Player
         UpdatePlayer();
     }
 
+    public override void Attack()
+    {
+        //throw new System.NotImplementedException();
+    }
+
     public void LevelUpStat(int NumStat)
     {
 
