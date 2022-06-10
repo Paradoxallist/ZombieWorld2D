@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Store : MonoBehaviour
 {
-    public Player myPlayer;
+    private Player myPlayer;
     [SerializeField]
     private ButtonBuyStats buttonBuyStatsPrefab;
     [SerializeField] 
@@ -30,9 +30,9 @@ public class Store : MonoBehaviour
         for(int i = 0; i < myPlayer.Stats.Count; i++)
         {
             ButtonBuyStats buttonItem = Instantiate(buttonBuyStatsPrefab, content);
-            buttonItem.UpdateInformation(myPlayer.Stats[i].StatType.ToString(), myPlayer.Stats[i].Level, myPlayer.Stats[i].ValuePrice.ToString());
             buttonItem.NumStat = i;
             buttonBuyStatsList.Add(buttonItem);
+            UpdateInfo(i);
         }
     }
     
@@ -44,9 +44,14 @@ public class Store : MonoBehaviour
             myPlayer.LevelUpStat((StatType)N);
             for (int i = 0; i < myPlayer.Stats.Count; i++)
             {
-                buttonBuyStatsList[i].UpdateInformation(myPlayer.Stats[i].StatType.ToString(), myPlayer.Stats[i].Level, myPlayer.Stats[i].ValuePrice.ToString());
+                UpdateInfo(i);
             }
         }
+    }
+
+    private void UpdateInfo(int i)
+    {
+        buttonBuyStatsList[i].UpdateInformation(myPlayer.Stats[i].StatType.ToString() + "(" + myPlayer.Stats[i].Value + ")" , myPlayer.Stats[i].Level + "(" + myPlayer.Stats[i].MaxLevel + ")", myPlayer.Stats[i].ValuePrice.ToString());
     }
 
 }

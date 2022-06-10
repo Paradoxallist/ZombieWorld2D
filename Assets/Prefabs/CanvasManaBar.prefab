@@ -58,7 +58,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -934078293
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &4222804962402940625
@@ -83,7 +83,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &1511067351503495561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,7 +280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c64cdb8d947fa7f448ecefe6f80c51ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHp: 0
   slider: {fileID: 5474856544971949169}
 --- !u!1 &8963210308050082978
 GameObject:

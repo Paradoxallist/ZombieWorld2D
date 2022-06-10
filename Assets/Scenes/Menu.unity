@@ -2457,6 +2457,8 @@ MonoBehaviour:
   CreatInput: {fileID: 30419665}
   JoinInput: {fileID: 12971475}
   Name: {fileID: 1521097546}
+  Menu: {fileID: 482987734}
+  PanelConnect: {fileID: 110331926}
   itemPrefab: {fileID: 2518508016057564739, guid: 54f3db363bbdceb4b9f7eb3942ff5613, type: 3}
   content: {fileID: 801053653}
 --- !u!4 &1029677775

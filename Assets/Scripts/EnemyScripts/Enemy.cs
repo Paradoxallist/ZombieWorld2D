@@ -158,11 +158,14 @@ public abstract class Enemy : MonoBehaviour
         float distanse = Mathf.Infinity;
         foreach (Player player in GameManager.Instance.players)
         {
-            float dist = Vector2.Distance(transform.position, player.transform.position);
-            if (dist < distanse && dist < AgrRange)
+            if (player != null)
             {
-                distanse = dist;
-                NearPlaer = player;
+                float dist = Vector2.Distance(transform.position, player.transform.position);
+                if (dist < distanse && dist < AgrRange)
+                {
+                    distanse = dist;
+                    NearPlaer = player;
+                }
             }
         }
         if (NearPlaer != null)

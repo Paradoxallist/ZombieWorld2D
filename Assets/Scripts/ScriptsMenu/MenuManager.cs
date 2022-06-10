@@ -11,17 +11,38 @@ public class MenuManager : MonoBehaviourPunCallbacks
     public TMP_InputField CreatInput;
     public TMP_InputField JoinInput;
     public TMP_InputField Name;
+    public GameObject Menu;
+    public GameObject PanelConnect;
+
+
+    private bool SetName;
 
     [SerializeField] ListItem itemPrefab; 
     [SerializeField] Transform content;
     List<ListItem> listItems;
     private void Start()
     {
+        SetName = false;
         listItems = new List<ListItem>();
-        PhotonNetwork.GameVersion = "0.00.013";
+        PhotonNetwork.GameVersion = "0.00.014";
         PhotonNetwork.ConnectUsingSettings();
         PhotonNetwork.JoinLobby();
     }
+
+    private void Update()
+    {
+        if (!SetName)
+        {
+            if (Input.GetKeyDown(KeyCode.Return)) //Press Enter
+            {
+                PushSingIn();
+                SetName = true;
+                Menu.SetActive(false);
+                PanelConnect.SetActive(true);
+            }
+        }
+    }
+
     public void CreateRoom()
     {
         RoomOptions roomOptions = new RoomOptions();

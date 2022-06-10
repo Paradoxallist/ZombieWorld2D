@@ -17,19 +17,25 @@ public class GameManager : MonoBehaviourPunCallbacks
     public List<Enemy> enemies = new List<Enemy>();
     public PhotonView PV;
     public static GameManager Instance;
-    public GameObject Spawner;
+    public List<Transform> Spawner;
 
     public Player MyPlayer;
 
     public PlayerTop Top;
-    public Transform SpawnPosition;
 
     [SerializeField] TMP_Text TextHpDescription;
     [SerializeField] TMP_Text TextDamageDescription;
     [SerializeField] TMP_Text TextSpeedDescription;
 
+    [SerializeField] TMP_Text TextWave;
+
+    private int Wave;
+    public float TimeBetweenWaves;
+    private float timeToWave;
+
     private void Start()
     {
+        Wave = 0;
         players = new List<Player>();
         if (Instance != this)
         {
@@ -47,6 +53,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             TextDamageDescription.text = "Damage - " + (int)MyPlayer.GetPlayerStat(StatType.Damage).Value;
             TextSpeedDescription.text = "Speed - " + MyPlayer.GetPlayerStat(StatType.Speed).Value;
         }
+        timeToWave += Time.deltaTime;
+        TextWave.text = "Wave:" + Wave + "(" +(int)(TimeBetweenWaves + Wave - timeToWave)  +")"; 
     }
 
     public void AddPlayer(Player player)
@@ -114,19 +122,44 @@ public class GameManager : MonoBehaviourPunCallbacks
         GameObject PlayerOb = PhotonNetwork.Instantiate(create.name, randomPosition, Quaternion.identity);
         Camera.main.GetComponent<CameraControl>().target = PlayerOb.transform;
         MyPlayer = PlayerOb.GetComponent<Player>();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SpawnWave();
+        }
+    }
+
+    public void SpawnWave()
+    {
+        Wave++;
+        for (int i = 0;i < Wave; i++)
+        {
+            Invoke("InstEnemy", i);
+        }
+        timeToWave = 0;
+        PV.RPC("SetInfoWave", RpcTarget.AllBuffered, Wave);
+        Invoke("SpawnWave", (Wave + TimeBetweenWaves));
+    }
+
+    [PunRPC]
+    public void SetInfoWave(int _Wave)
+    {
+        timeToWave = 0;
+        Wave = _Wave;
     }
 
     public void InstEnemy()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            Vector3 EnemyPosition = SpawnPosition.position;
-            int RandomIndex = Random.Range(0, EnemyPrefab.Count);
-            print(RandomIndex);
-            GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyPrefab[RandomIndex].name, EnemyPosition, Quaternion.identity);
-            //GameObject en = PhotonNetwork.Instantiate(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
-            Enemy enemy = en.GetComponent<Enemy>();
-            enemies.Add(enemy);
+            for (int i = 0; i < Spawner.Count; i++)
+            {
+                Vector3 EnemyPosition = Spawner[i].transform.position;
+                int RandomIndex = Random.Range(0, EnemyPrefab.Count);
+                GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyPrefab[RandomIndex].name, EnemyPosition, Quaternion.identity);
+                //GameObject en = PhotonNetwork.Instantiate(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
+                Enemy enemy = en.GetComponent<Enemy>();
+                enemies.Add(enemy);
+            }
         }
     }
 }

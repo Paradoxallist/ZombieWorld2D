@@ -14,7 +14,13 @@ public abstract class Player : MonoBehaviour//, IPunObservable
     public float HpRegen;
     public float ManaRegen;
     public float Damage;
+    public float delayAttack;
     public float Speed;
+
+
+    public float EX;
+    public int LVL;
+    public int LVLPoint;
 
     public float CostAbilityOne;
     public float CostAbilityTwo;
@@ -32,8 +38,8 @@ public abstract class Player : MonoBehaviour//, IPunObservable
     public SpriteRenderer PlayerSpriteBody;
 
     public float Score;
-    public float delayAttack;
     private float timeWitoutAttack;
+    public float xMax, yMax, xMin, yMin;
 
     public void StartPlayer()
     {
@@ -42,7 +48,7 @@ public abstract class Player : MonoBehaviour//, IPunObservable
         {
             NicknameText.color = Color.green;
         }
-        UpdateStat();
+        UpdateStats();
         Hp = MaxHp;
         hpBar.SetMaxValue(MaxHp,Hp);
         Mana = MaxMana;
@@ -72,6 +78,7 @@ public abstract class Player : MonoBehaviour//, IPunObservable
                 AbilityTwo();
             }
             Rotate();
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, xMin, xMax), Mathf.Clamp(transform.position.y, yMin, yMax), transform.position.z);
             timeWitoutAttack += Time.deltaTime;
             //Move(horizontal, vertical);
         }
@@ -164,24 +171,40 @@ public abstract class Player : MonoBehaviour//, IPunObservable
         return Stats.First(stat => stat.StatType == statType);
     }
 
-    public void UpdateStat()
+    public abstract void UpdateStats();
+
+    public void UpdateStandartStats()
     {
-        Damage = GetPlayerStat(StatType.Damage).Value;
         if (MaxHp != GetPlayerStat(StatType.MaxHp).Value)
         {
             Hp += GetPlayerStat(StatType.MaxHp).Value - MaxHp;
             MaxHp = GetPlayerStat(StatType.MaxHp).Value;
             hpBar.SetMaxValue(MaxHp, Hp);
         }
+        HpRegen = GetPlayerStat(StatType.HpRagen).Value;
+        if (MaxMana != GetPlayerStat(StatType.MaxMana).Value)
+        {
+            Mana += GetPlayerStat(StatType.MaxMana).Value - MaxMana;
+            MaxMana = GetPlayerStat(StatType.MaxMana).Value;
+            manaBar.SetMaxValue(MaxMana, Mana);
+        }
+        HpRegen = GetPlayerStat(StatType.ManaRegen).Value;
+        Damage = GetPlayerStat(StatType.Damage).Value;
         Speed = GetPlayerStat(StatType.Speed).Value;
+        delayAttack = GetPlayerStat(StatType.DelayAttack).Value;
     }
 
     public virtual void LevelUpStat(StatType statType)
     {
         PlayerStat playerStat = GetPlayerStat(statType);
         playerStat.Update();
-        UpdateStat();
-        photonView.RPC("SetDataCharacteristics", RpcTarget.AllBuffered, Hp, Damage, Speed);
+        UpdateStats();
+    }
+
+    [PunRPC]
+    public void HpSynchronization(float _Hp)
+    {
+        Hp = _Hp;
     }
 
     [PunRPC]

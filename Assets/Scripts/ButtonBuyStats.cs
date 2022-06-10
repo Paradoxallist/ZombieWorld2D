@@ -11,7 +11,7 @@ public class ButtonBuyStats : MonoBehaviour
     [SerializeField] TMP_Text TextLevel;
     [SerializeField] TMP_Text TextPrice;
 
-    public void UpdateInformation(string description, int level, string price)
+    public void UpdateInformation(string description, string level, string price)
     {
         TextDescription.text = description;
         TextLevel.text = (level).ToString();

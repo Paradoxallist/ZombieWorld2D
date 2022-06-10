@@ -62,8 +62,12 @@ public class PlayerStat
 public enum StatType
 {
     MaxHp,
+    HpRagen,
+    MaxMana,
+    ManaRegen,
     Damage,
-    Speed
+    Speed,
+    DelayAttack
 }
 
 [System.Serializable]

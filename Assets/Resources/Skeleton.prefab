@@ -60,16 +60,16 @@ MonoBehaviour:
   AttackSpeed: 2
   Speed: 2
   RotationSpeed: 3
-  Prize: 4
+  Prize: 10
   hpBar: {fileID: 4969725902073536930}
   PV: {fileID: 2439111341735940113}
   HP_Text: {fileID: 1940210636924935792}
   EnemyBody: {fileID: 6282149379931927133}
   EnemySpriteBody: {fileID: 893670719799899523}
   victim: {fileID: 0}
-  AgrRange: 12
+  AgrRange: 100
   EnemyBulletOb: {fileID: 3321431105549617010, guid: 3741edef1755a5645bbcca1878518ba5, type: 3}
-  RangeBulletFlying: 10
+  RangeBulletFlying: 12
 --- !u!50 &7993535463760999746
 Rigidbody2D:
   serializedVersion: 4

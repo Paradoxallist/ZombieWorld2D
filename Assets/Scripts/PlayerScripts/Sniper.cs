@@ -62,6 +62,7 @@ public class Sniper : Player
     {
         Hp -= _damage;
         Alive();
+        photonView.RPC("HpSynchronization", RpcTarget.AllBuffered, Hp);
     }
 
     public override void AbilityOne()
@@ -78,7 +79,7 @@ public class Sniper : Player
                 SniperBullet b = bulletGameoject.GetComponent<SniperBullet>();
                 b.SetRange(RangeAttack);
                 b.SetPlayer(this);
-                Vector2 target = new Vector2(Mathf.Cos((Mathf.PI / 180) * ((angel / CountBullet) * i + startAngel)), Mathf.Sin((Mathf.PI / 180) * ((angel / CountBullet) * i + startAngel))) * RangeAttack + (Vector2)transform.position;
+                Vector2 target = new Vector2(Mathf.Cos((Mathf.PI / 180) * ((angel / CountBullet) * i + startAngel)), Mathf.Sin((Mathf.PI / 180) * ((angel / CountBullet) * i + startAngel))) + (Vector2)transform.position;
                 b.SetTargetPositon(target);
             }
         }
@@ -99,6 +100,18 @@ public class Sniper : Player
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 0.8f, 0f);
             delayAttack /= 2;
         }
+    }
+
+    public override void UpdateStats()
+    {
+        Damage = GetPlayerStat(StatType.Damage).Value;
+        if (MaxHp != GetPlayerStat(StatType.MaxHp).Value)
+        {
+            Hp += GetPlayerStat(StatType.MaxHp).Value - MaxHp;
+            MaxHp = GetPlayerStat(StatType.MaxHp).Value;
+            hpBar.SetMaxValue(MaxHp, Hp);
+        }
+        Speed = GetPlayerStat(StatType.Speed).Value;
     }
 
 

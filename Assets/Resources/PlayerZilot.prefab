@@ -178,7 +178,11 @@ MonoBehaviour:
   HpRegen: 2
   ManaRegen: 1
   Damage: 30
+  delayAttack: 0.8
   Speed: 3
+  EX: 0
+  LVL: 0
+  LVLPoint: 0
   CostAbilityOne: 10
   CostAbilityTwo: 6
   Stats:
@@ -191,18 +195,46 @@ MonoBehaviour:
     maxLevel: 100
   - statType: 1
     modifierType: 0
-    modifier: 20
-    value: 30
+    modifier: 0.5
+    value: 2
     modifierPrice: 20
-    valuePrice: 10
+    valuePrice: 20
     maxLevel: 100
   - statType: 2
+    modifierType: 0
+    modifier: 25
+    value: 100
+    modifierPrice: 20
+    valuePrice: 20
+    maxLevel: 100
+  - statType: 3
+    modifierType: 0
+    modifier: 0.5
+    value: 1
+    modifierPrice: 25
+    valuePrice: 25
+    maxLevel: 10
+  - statType: 4
+    modifierType: 0
+    modifier: 5
+    value: 30
+    modifierPrice: 20
+    valuePrice: 20
+    maxLevel: 20
+  - statType: 5
     modifierType: 0
     modifier: 0.05
     value: 3
     modifierPrice: 10
     valuePrice: 15
     maxLevel: 20
+  - statType: 6
+    modifierType: 0
+    modifier: -0.05
+    value: 0.8
+    modifierPrice: 50
+    valuePrice: 50
+    maxLevel: 10
   photonView: {fileID: 8804289184067383971}
   rb: {fileID: 1042905940}
   NicknameText: {fileID: 3681265164911538028}
@@ -211,7 +243,10 @@ MonoBehaviour:
   PlayerBody: {fileID: 672644326051144728}
   PlayerSpriteBody: {fileID: 672644326051144726}
   Score: 0
-  delayAttack: 0.8
+  xMax: 30
+  yMax: 30
+  xMin: -30
+  yMin: -30
   Defens: 10
   SwordAttack: {fileID: 250271496}
   LifeTimeSwordAttack: 0.08
@@ -565,7 +600,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7150852632963883568, guid: 36e5782714840e247834882d8d1bd343, type: 3}
       propertyPath: m_SortingLayerID
-      value: 2133424797
+      value: -934078293
       objectReference: {fileID: 0}
     - target: {fileID: 7604155680850266387, guid: 36e5782714840e247834882d8d1bd343, type: 3}
       propertyPath: m_Name

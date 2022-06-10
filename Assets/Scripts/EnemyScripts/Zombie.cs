@@ -35,8 +35,6 @@ public class Zombie : Enemy
     public override void TakeDamage(float _damage, Player player)
     {
         Hp -= _damage;
-        HP_Text.text = Hp + "/" + MaxHp;
-        hpBar.SetValue(Hp);
         if (Hp > 0)
         {
             if (victim == null)

@@ -69,6 +69,7 @@ public class Zilot : Player
         {
             Hp -= takenDamage;
             Alive();
+            photonView.RPC("HpSynchronization", RpcTarget.AllBuffered, Hp);
         }
     }
 
@@ -129,6 +130,10 @@ public class Zilot : Player
         time = 0;
         abilityOneActive = false;
         photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 1f, 1f);
+    }
+    public override void UpdateStats()
+    {
+        UpdateStandartStats();
     }
 
     private void OnTriggerEnter2D(Collider2D coll)

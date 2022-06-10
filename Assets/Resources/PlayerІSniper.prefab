@@ -160,7 +160,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 1967875629
+  m_SortingLayerID: -934078293
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &1180518729533856341
@@ -691,7 +691,11 @@ MonoBehaviour:
   HpRegen: 1
   ManaRegen: 2
   Damage: 25
+  delayAttack: 1
   Speed: 3
+  EX: 0
+  LVL: 0
+  LVLPoint: 0
   CostAbilityOne: 20
   CostAbilityTwo: 7
   Stats:
@@ -704,18 +708,46 @@ MonoBehaviour:
     maxLevel: 100
   - statType: 1
     modifierType: 0
-    modifier: 15
-    value: 25
-    modifierPrice: 100
-    valuePrice: 10
+    modifier: 0.5
+    value: 1
+    modifierPrice: 20
+    valuePrice: 20
     maxLevel: 100
   - statType: 2
+    modifierType: 0
+    modifier: 25
+    value: 100
+    modifierPrice: 20
+    valuePrice: 20
+    maxLevel: 100
+  - statType: 3
+    modifierType: 0
+    modifier: 0.5
+    value: 2
+    modifierPrice: 25
+    valuePrice: 25
+    maxLevel: 10
+  - statType: 4
+    modifierType: 0
+    modifier: 5
+    value: 25
+    modifierPrice: 20
+    valuePrice: 20
+    maxLevel: 100
+  - statType: 5
     modifierType: 0
     modifier: 0.05
     value: 3
     modifierPrice: 10
     valuePrice: 10
     maxLevel: 20
+  - statType: 6
+    modifierType: 0
+    modifier: -0.05
+    value: 1
+    modifierPrice: 50
+    valuePrice: 50
+    maxLevel: 10
   photonView: {fileID: 77296916079093506}
   rb: {fileID: 8880398622318898933}
   NicknameText: {fileID: 4294229105767153029}
@@ -724,7 +756,10 @@ MonoBehaviour:
   PlayerBody: {fileID: 1998171583967521277}
   PlayerSpriteBody: {fileID: 8509117874939989153}
   Score: 0
-  delayAttack: 1
+  xMax: 30
+  yMax: 30
+  xMin: -30
+  yMin: -30
   BulletOb: {fileID: 5096200266444098278, guid: 1eb087e6095b1a94b8634085efa7bb1b, type: 3}
   RangeAttack: 8
   CountBullet: 9
@@ -753,7 +788,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 1.4}
+  m_Size: {x: 1.2, y: 1.2}
   m_EdgeRadius: 0
 --- !u!212 &391235848
 SpriteRenderer:
@@ -817,6 +852,10 @@ PrefabInstance:
     - target: {fileID: 243284978132237472, guid: 1fb607dd117a1264f83ec26b82a9d31a, type: 3}
       propertyPath: m_Name
       value: CanvasManaBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 710407376160774019, guid: 1fb607dd117a1264f83ec26b82a9d31a, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -934078293
       objectReference: {fileID: 0}
     - target: {fileID: 2207935570909394756, guid: 1fb607dd117a1264f83ec26b82a9d31a, type: 3}
       propertyPath: m_AnchorMax.x

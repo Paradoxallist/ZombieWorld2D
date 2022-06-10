@@ -263,14 +263,14 @@ MonoBehaviour:
   AttackSpeed: 1
   Speed: 1.25
   RotationSpeed: 3
-  Prize: 2
+  Prize: 5
   hpBar: {fileID: 2159875406871445398}
   PV: {fileID: 8690077236329382962}
   HP_Text: {fileID: 4712670344054903139}
   EnemyBody: {fileID: 1402958544325572010}
   EnemySpriteBody: {fileID: 5129685657447846404}
   victim: {fileID: 0}
-  AgrRange: 12
+  AgrRange: 100
 --- !u!50 &7980221804484986815
 Rigidbody2D:
   serializedVersion: 4
