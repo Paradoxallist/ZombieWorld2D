@@ -49,6 +49,15 @@ MonoBehaviour:
   - SetHp
   - SetScore
   - SetDataCharacteristics
+  - SetPunRotate
+  - SetManaPun
+  - SetRotatePun
+  - SetColor
+  - SetColorSniper
+  - SetAbilityTwoActivePun
+  - SetAbilityTwoActivePunS
+  - SetAbilityTwoActiveSniperPun
+  - SetSwordActive
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

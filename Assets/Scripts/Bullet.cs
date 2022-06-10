@@ -5,22 +5,22 @@ using Photon.Pun;
 
 public class Bullet : MonoBehaviour
 {
+    public float Speed;
+
     private Vector2 targetPosition;
     private Vector2 startPos;
     private bool isMove = false;
-    public float Speed;
-    public float damage;
-    public float Range;
+    private float range;
     private float time;
-    public PhotonView PV;
-    private Player player;
+    private PhotonView PV;
 
-    void Start()
+    public void StartBullet()
     {
+        PV = GetComponent<PhotonView>();
         time = 0;
     }
 
-    void Update()
+    public void UpdateBullet()
     {
         if (!isMove) {return; }
         time += Speed * Time.deltaTime;
@@ -31,15 +31,17 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void SetTargetPositon(Vector2 targetPos, Player _player)
+    public void SetRange(float _range)
+    {
+        range =_range;
+    }
+
+    public void SetTargetPositon(Vector2 targetPos)
     {
         Vector2 direction = (targetPos - (Vector2)transform.position).normalized;
-        print(direction);
-        print(targetPos);
-        targetPosition = direction * Range + (Vector2)transform.position;
+        targetPosition = direction * range + (Vector2)transform.position;
         startPos = transform.position;
         isMove = true;
-        player = _player;
         float angel = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angel);
     }
@@ -47,29 +49,5 @@ public class Bullet : MonoBehaviour
     public void DestroyHimself()
     {
         PhotonNetwork.Destroy(PV);
-    }
-    [PunRPC]
-    public void DestroyBullet()
-    {
-        PhotonNetwork.Destroy(PV);
-    }
-
-    private void OnTriggerEnter2D(Collider2D coll)
-    {
-        if (coll.tag == "Wall")
-        {
-            DestroyHimself();
-        }
-        if (coll.tag == "Enemy")
-        {
-            Enemy enemy = coll.GetComponent<Enemy>();
-            enemy.TakeDamage(damage);
-            if (enemy == null || enemy.Hp <= 0)
-            {
-                player.Score++;
-            }
-            player.SendScore();
-            DestroyHimself();
-        }
     }
 }

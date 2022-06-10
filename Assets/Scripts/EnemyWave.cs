@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyWave : MonoBehaviour
 {
-    
     public void Spawn()
     {
         GameManager.Instance.InstEnemy();

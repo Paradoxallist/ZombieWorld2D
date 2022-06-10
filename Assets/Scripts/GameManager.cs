@@ -9,13 +9,12 @@ using TMPro;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public List<GameObject> ClassPrefab;
-    //public MapController MapController;
+    public List<GameObject> EnemyPrefab;
     public int NumClass;
     public float minX, minY, maxX, maxY;
 
     public List<Player> players = new List<Player>();
     public List<Enemy> enemies = new List<Enemy>();
-    public GameObject EnemyGameObject;
     public PhotonView PV;
     public static GameManager Instance;
     public GameObject Spawner;
@@ -23,11 +22,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Player MyPlayer;
 
     public PlayerTop Top;
-    public Transform StartVictim;
     public Transform SpawnPosition;
-    
+
+    [SerializeField] TMP_Text TextHpDescription;
+    [SerializeField] TMP_Text TextDamageDescription;
+    [SerializeField] TMP_Text TextSpeedDescription;
+
     private void Start()
     {
+        players = new List<Player>();
         if (Instance != this)
         {
             Destroy(Instance);
@@ -37,13 +40,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        /*if (PhotonNetwork.MasterClient == null)
-        {
-            //PhotonNetwork.DestroyPlayerObjects(PhotonNetwork.player);
-            PhotonNetwork.LeaveRoom();
-            PhotonNetwork.LoadLevel(1);
-        }*/
         Top.SetText(players);
+        if(MyPlayer != null)
+        {
+            TextHpDescription.text = "Hp - " + (int)MyPlayer.Hp + "/" + MyPlayer.GetPlayerStat(StatType.MaxHp).Value.ToString();
+            TextDamageDescription.text = "Damage - " + (int)MyPlayer.GetPlayerStat(StatType.Damage).Value;
+            TextSpeedDescription.text = "Speed - " + MyPlayer.GetPlayerStat(StatType.Speed).Value;
+        }
     }
 
     public void AddPlayer(Player player)
@@ -118,16 +121,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             Vector3 EnemyPosition = SpawnPosition.position;
-            GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
+            int RandomIndex = Random.Range(0, EnemyPrefab.Count);
+            print(RandomIndex);
+            GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyPrefab[RandomIndex].name, EnemyPosition, Quaternion.identity);
             //GameObject en = PhotonNetwork.Instantiate(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
             Enemy enemy = en.GetComponent<Enemy>();
-            enemy.destinationSetter.target = StartVictim;
             enemies.Add(enemy);
         }
-    }
-
-    public void LevelUpStats(int NumStat, TMP_Text LevelText)
-    {
-        
     }
 }
