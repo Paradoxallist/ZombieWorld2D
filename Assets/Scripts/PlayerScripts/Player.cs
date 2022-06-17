@@ -7,16 +7,15 @@ using UnityEngine.UI;
 
 public abstract class Player : MonoBehaviour//, IPunObservable
 {
-    public float MaxHp;
-    public float Hp;
-    public float MaxMana;
-    public float Mana;
-    public float HpRegen;
-    public float ManaRegen;
-    public float Damage;
-    public float delayAttack;
-    public float Speed;
-
+    private float maxHp;
+    private float hp;
+    private float maxMana;
+    private float mana;
+    private float hpRegen;
+    private float manaRegen;
+    private float damage;
+    private float attackSpeed;
+    private float speed;
 
     public float EX;
     public int LVL;
@@ -40,6 +39,18 @@ public abstract class Player : MonoBehaviour//, IPunObservable
     public float Score;
     private float timeWitoutAttack;
     public float xMax, yMax, xMin, yMin;
+
+    private int ID;
+
+    public float MaxHp { get => maxHp; set => maxHp = value; }
+    public float Hp { get => hp; set => hp = value; }
+    public float MaxMana { get => maxMana; set => maxMana = value; }
+    public float Mana { get => mana; set => mana = value; }
+    public float HpRegen { get => hpRegen; set => hpRegen = value; }
+    public float ManaRegen { get => manaRegen; set => manaRegen = value; }
+    public float Damage { get => damage; set => damage = value; }
+    public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
+    public float Speed { get => speed; set => speed = value; }
 
     public void StartPlayer()
     {
@@ -134,13 +145,14 @@ public abstract class Player : MonoBehaviour//, IPunObservable
 
     public abstract void Attack();
 
-    public void SendScore()
+    public void SetScore(float _Score)
     {
-        photonView.RPC("SetScore", RpcTarget.AllBuffered, Score);
+        Score = _Score;
+        photonView.RPC("SetScorePun", RpcTarget.AllBuffered, Score);
     }
 
     [PunRPC]
-    public void SetScore(int _Score)
+    public void SetScorePun(float _Score)
     {
         Score = _Score;
     }
@@ -161,9 +173,26 @@ public abstract class Player : MonoBehaviour//, IPunObservable
     {
         if (Hp <= 0)
         {
-            PhotonNetwork.LeaveRoom();
-            PhotonNetwork.LoadLevel(1);
+            GameManager.Instance.PlayerDie(ID);
         }
+    }
+
+    public void Die()
+    {
+        photonView.gameObject.SetActive(false);
+        photonView.RPC("SetActivePun", RpcTarget.AllBuffered, false);
+    }
+
+    [PunRPC]
+    public void SetActivePun(bool active)
+    {
+        gameObject.SetActive(active);
+    }
+
+    public void Resurrection()
+    {
+        photonView.gameObject.SetActive(true);
+        photonView.RPC("SetActivePun", RpcTarget.AllBuffered, true);
     }
 
     public PlayerStat GetPlayerStat(StatType statType)
@@ -188,10 +217,10 @@ public abstract class Player : MonoBehaviour//, IPunObservable
             MaxMana = GetPlayerStat(StatType.MaxMana).Value;
             manaBar.SetMaxValue(MaxMana, Mana);
         }
-        HpRegen = GetPlayerStat(StatType.ManaRegen).Value;
+        ManaRegen = GetPlayerStat(StatType.ManaRegen).Value;
         Damage = GetPlayerStat(StatType.Damage).Value;
         Speed = GetPlayerStat(StatType.Speed).Value;
-        delayAttack = GetPlayerStat(StatType.DelayAttack).Value;
+        AttackSpeed = GetPlayerStat(StatType.AttackSpeed).Value;
     }
 
     public virtual void LevelUpStat(StatType statType)
@@ -215,16 +244,15 @@ public abstract class Player : MonoBehaviour//, IPunObservable
         Speed = _Speed;
     }
 
-    /*public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    public void SetID(int _ID)
     {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(angel);
-        }
-        else
-        {
-            angel = (float)stream.ReceiveNext();
+        ID = _ID;
+    }
+    
+    public int GetID()
+    {
+        return ID;
+    }
 
-        }
-    }*/
+    
 }

@@ -684,20 +684,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06a387302dcaafc4d85cf86ac51409fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHp: 50
-  Hp: 0
-  MaxMana: 100
-  Mana: 0
-  HpRegen: 1
-  ManaRegen: 2
-  Damage: 25
-  delayAttack: 1
-  Speed: 3
   EX: 0
   LVL: 0
   LVLPoint: 0
-  CostAbilityOne: 20
-  CostAbilityTwo: 7
+  CostAbilityOne: 18
+  CostAbilityTwo: 9
   Stats:
   - statType: 0
     modifierType: 0
@@ -737,7 +728,7 @@ MonoBehaviour:
   - statType: 5
     modifierType: 0
     modifier: 0.05
-    value: 3
+    value: 4
     modifierPrice: 10
     valuePrice: 10
     maxLevel: 20

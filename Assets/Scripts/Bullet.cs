@@ -12,11 +12,11 @@ public class Bullet : MonoBehaviour
     private bool isMove = false;
     private float range;
     private float time;
-    private PhotonView PV;
+    public PhotonView PV;
 
     public void StartBullet()
     {
-        PV = GetComponent<PhotonView>();
+        //PV = GetComponent<PhotonView>();
         time = 0;
     }
 
@@ -48,6 +48,12 @@ public class Bullet : MonoBehaviour
 
     public void DestroyHimself()
     {
-        PhotonNetwork.Destroy(PV);
+        PhotonNetwork.Destroy(gameObject);
+    }
+
+    [PunRPC]
+    public void DestroyBullet()
+    {
+        PhotonNetwork.Destroy(gameObject);
     }
 }

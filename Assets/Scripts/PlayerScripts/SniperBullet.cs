@@ -30,7 +30,10 @@ public class SniperBullet : Bullet
         if (coll.tag == "Enemy")
         {
             Enemy enemy = coll.GetComponent<Enemy>();
-            enemy.TakeDamage(player.Damage, player);
+            if (player != null)
+            {
+                enemy.TakeDamage(player.Damage, player);
+            }
             DestroyHimself();
         }
     }

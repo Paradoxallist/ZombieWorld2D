@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Store : MonoBehaviour
 {
-    private Player myPlayer;
+    public Player myPlayer;
     [SerializeField]
     private ButtonBuyStats buttonBuyStatsPrefab;
     [SerializeField] 
@@ -24,9 +24,14 @@ public class Store : MonoBehaviour
         InstButton();
     }
 
+    public void SetMyPlayer(Player player)
+    {
+        myPlayer = player;
+    }
+
     public void InstButton()
     {
-        myPlayer = GameManager.Instance.MyPlayer;
+        //myPlayer = GameManager.Instance.MyPlayer;
         for(int i = 0; i < myPlayer.Stats.Count; i++)
         {
             ButtonBuyStats buttonItem = Instantiate(buttonBuyStatsPrefab, content);

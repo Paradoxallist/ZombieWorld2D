@@ -13,14 +13,17 @@ public class Zombie : Enemy
     void Update()
     {
         UpdateEnemy();
-        if (victim != null && !GetVariableStun())
+        if (PhotonNetwork.IsMasterClient)
         {
-            SetTarget(victim.transform);
-            if (AttackSpeed < GetTimeWithoutAttack())
+            if (victim != null && !GetVariableStun())
             {
-                if (Vector2.Distance(victim.transform.position, transform.position) < RangeAttack)
+                SetTarget(victim.transform);
+                if (AttackSpeed < GetTimeWithoutAttack())
                 {
-                    Attack();
+                    if (Vector2.Distance(victim.transform.position, transform.position) < RangeAttack)
+                    {
+                        Attack();
+                    }
                 }
             }
         }
@@ -43,7 +46,7 @@ public class Zombie : Enemy
         }
         else
         {
-            player.Score += Prize;
+            player.SetScore(player.Score + Prize);
             DestroyHimself();
         }
     }

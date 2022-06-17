@@ -60,6 +60,19 @@ MonoBehaviour:
   - SetSwordActive
   - HpSynchronization
   - SetInfoWave
+  - SynchronizingWave
+  - RequestMasterDataWave
+  - SynchronizingDataWave
+  - RequestMasterData
+  - RequestMasterDataAlive
+  - RequestMasterDataDiePlayer
+  - SynchronizingDataDiePlayer
+  - DefensSynchronization
+  - PunResetList
+  - SetScorePun
+  - SetActivePun
+  - ClientSetID
+  - MasterClientSetID
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

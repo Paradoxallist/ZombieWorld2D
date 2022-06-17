@@ -261,9 +261,13 @@ MonoBehaviour:
   Damage: 40
   RangeAttack: 1.4
   AttackSpeed: 1
-  Speed: 1.25
+  Speed: 4.5
+  xMax: 30
+  yMax: 30
+  xMin: -30
+  yMin: -30
   RotationSpeed: 3
-  Prize: 5
+  Prize: 7.5
   hpBar: {fileID: 2159875406871445398}
   PV: {fileID: 8690077236329382962}
   HP_Text: {fileID: 4712670344054903139}

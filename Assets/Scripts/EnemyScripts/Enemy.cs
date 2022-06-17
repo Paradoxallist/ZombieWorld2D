@@ -15,6 +15,8 @@ public abstract class Enemy : MonoBehaviour
     private float timeWithoutAttack;
     public float Speed;
 
+    public float xMax, yMax, xMin, yMin;
+
     public float RotationSpeed;
 
     public float Prize;
@@ -67,8 +69,12 @@ public abstract class Enemy : MonoBehaviour
 
     public void UpdateEnemy()
     {
-        timeWithoutAttack += Time.deltaTime;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            timeWithoutAttack += Time.deltaTime;
+        }
         Rotate();
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, xMin, xMax), Mathf.Clamp(transform.position.y, yMin, yMax), transform.position.z);
         hpBar.SetValue(Hp);
         HP_Text.text = Hp + "/" + MaxHp;
         SearchVictim();
@@ -158,7 +164,7 @@ public abstract class Enemy : MonoBehaviour
         float distanse = Mathf.Infinity;
         foreach (Player player in GameManager.Instance.players)
         {
-            if (player != null)
+            if (player != null && player.gameObject.activeSelf)
             {
                 float dist = Vector2.Distance(transform.position, player.transform.position);
                 if (dist < distanse && dist < AgrRange)

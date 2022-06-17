@@ -7,6 +7,7 @@ using TMPro;
 public class Zilot : Player
 {
     public float Defens;
+    public float AbilityDefens;
     public Sword SwordAttack;
     public float LifeTimeSwordAttack;
     public float SpeedDash;
@@ -34,7 +35,7 @@ public class Zilot : Player
         UpdatePlayer();
         if (photonView.IsMine)
         {
-            if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > delayAttack)
+            if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > AttackSpeed)
             {
                 SetTimeWitoutAttack(0);
                 Attack();
@@ -76,6 +77,7 @@ public class Zilot : Player
     public override void Attack()
     {
         SwordAttack.gameObject.SetActive(true);
+        SwordAttack.ResetList();
         photonView.RPC("SetSwordActive", RpcTarget.AllBuffered,true);
         Invoke("DeactiveSword", LifeTimeSwordAttack);
     }
@@ -94,6 +96,7 @@ public class Zilot : Player
 
     public override void AbilityOne()
     {
+        /*
         if (Mana > CostAbilityOne && !abilityOneActive && !inWall)
         {
             Mana -= CostAbilityOne;
@@ -104,7 +107,7 @@ public class Zilot : Player
             DeshPosition = direction * LengthDesh + (Vector2)transform.position;
             PlayerSpriteBody.color = Color.red;
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 0f, 0f);
-        }
+        }*/
     }
 
     public override void AbilityTwo()
@@ -114,15 +117,36 @@ public class Zilot : Player
             abilityTwoActive = false;
             PlayerSpriteBody.color = Color.white;
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f,1f,1f);
-            Defens -= 25f;
+            Defens -= AbilityDefens;
         }
         else if(!abilityTwoActive & Mana > CostAbilityTwo)
         {
             abilityTwoActive = true;
             PlayerSpriteBody.color = new Color(0f,1f,1f);
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 0f,1f,1f);
-            Defens += 25f;
+            Defens += AbilityDefens;
         }
+        photonView.RPC("DefensSynchronization", RpcTarget.AllBuffered, Defens);
+    }
+
+    /*public override void Die()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public override void Resurrection()
+    {
+        photonView.gameObject.SetActive(true);
+        Hp = MaxHp;
+        Mana = MaxMana;
+        abilityOneActive = false;
+        abilityTwoActive = false;
+    }*/
+
+    [PunRPC]
+    public void DefensSynchronization(float _Defens)
+    {
+        Defens = _Defens;
     }
 
     private void StopDash()

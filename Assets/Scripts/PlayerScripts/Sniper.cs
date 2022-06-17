@@ -27,7 +27,7 @@ public class Sniper : Player
         UpdatePlayer();
         if (photonView.IsMine)
         {
-            if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > delayAttack)
+            if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > AttackSpeed)
             {
                 SetTimeWitoutAttack(0);
                 /*bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -84,34 +84,45 @@ public class Sniper : Player
             }
         }
     }
-    public override void AbilityTwo()
+    public override void AbilityTwo() // ychituvat procaxhky
     {
         if (abilityTwoActive)
         {
             abilityTwoActive = false;
             PlayerSpriteBody.color = Color.white;
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 1f, 1f);
-            delayAttack *= 2;
+            AttackSpeed *= 3;
         }
         else if (!abilityTwoActive & Mana > CostAbilityTwo)
         {
             abilityTwoActive = true;
             PlayerSpriteBody.color = new Color(1f, 0.8f, 0f);
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 0.8f, 0f);
-            delayAttack /= 2;
+            AttackSpeed /= 3;
         }
     }
 
+    /*public override void Die()
+    {
+        photonView.gameObject.SetActive(false);
+        photonView.RPC("SetActivePun", RpcTarget.AllBuffered, false);
+    }
+
+    public override void Resurrection()
+    {
+        photonView.gameObject.SetActive(true);
+        Hp = MaxHp;
+        Mana = MaxMana;
+        abilityTwoActive = false;
+    }*/
+
     public override void UpdateStats()
     {
-        Damage = GetPlayerStat(StatType.Damage).Value;
-        if (MaxHp != GetPlayerStat(StatType.MaxHp).Value)
+        UpdateStandartStats();
+        if (abilityTwoActive)
         {
-            Hp += GetPlayerStat(StatType.MaxHp).Value - MaxHp;
-            MaxHp = GetPlayerStat(StatType.MaxHp).Value;
-            hpBar.SetMaxValue(MaxHp, Hp);
+            AttackSpeed /= 3;
         }
-        Speed = GetPlayerStat(StatType.Speed).Value;
     }
 
 

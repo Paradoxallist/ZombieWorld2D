@@ -8,34 +8,27 @@ using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    public List<GameObject> ClassPrefab;
     public List<GameObject> EnemyPrefab;
-    public int NumClass;
+
     public float minX, minY, maxX, maxY;
 
     public List<Player> players = new List<Player>();
+    private List<int> diePlayersID = new List<int>();
     public List<Enemy> enemies = new List<Enemy>();
     public PhotonView PV;
     public static GameManager Instance;
     public List<Transform> Spawner;
 
-    public Player MyPlayer;
-
-    public PlayerTop Top;
-
-    [SerializeField] TMP_Text TextHpDescription;
-    [SerializeField] TMP_Text TextDamageDescription;
-    [SerializeField] TMP_Text TextSpeedDescription;
-
-    [SerializeField] TMP_Text TextWave;
-
-    private int Wave;
+    public int Wave;
     public float TimeBetweenWaves;
-    private float timeToWave;
+    public float timeToWave;
 
-    private void Start()
+    private bool startSpawnWave;
+
+    private void Awake()
     {
         Wave = 0;
+        startSpawnWave = false;
         players = new List<Player>();
         if (Instance != this)
         {
@@ -44,40 +37,24 @@ public class GameManager : MonoBehaviourPunCallbacks
         Instance = this;
     }
 
+    private void Start()
+    {
+        PV.RPC("RequestMasterDataWave", RpcTarget.MasterClient);
+    }
+
     private void Update()
     {
-        Top.SetText(players);
-        if(MyPlayer != null)
-        {
-            TextHpDescription.text = "Hp - " + (int)MyPlayer.Hp + "/" + MyPlayer.GetPlayerStat(StatType.MaxHp).Value.ToString();
-            TextDamageDescription.text = "Damage - " + (int)MyPlayer.GetPlayerStat(StatType.Damage).Value;
-            TextSpeedDescription.text = "Speed - " + MyPlayer.GetPlayerStat(StatType.Speed).Value;
-        }
         timeToWave += Time.deltaTime;
-        TextWave.text = "Wave:" + Wave + "(" +(int)(TimeBetweenWaves + Wave - timeToWave)  +")"; 
+        if (PhotonNetwork.IsMasterClient && !startSpawnWave && (TimeBetweenWaves + Wave * 3 - timeToWave) < 0)
+        {
+            SpawnWave();
+        }
     }
 
     public void AddPlayer(Player player)
     {
         players.Add(player);
-    }
-
-    public void Send(Enemy enemy)
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            
-        }
-        else
-        {
-            PV.RPC("SynchronizingDataPlayers", RpcTarget.MasterClient, enemy.Hp);//, enemies);
-        }
-    }
-
-    [PunRPC]
-    private void SynchronizingDataPlayers(string gg)//List<Player> _players, List<Enemy> _enemies)
-    {
-        print("good");
+        player.SetID(players.Count - 1);
     }
 
     public void UpdateHpBarEnemy(Enemy enemy)
@@ -85,51 +62,39 @@ public class GameManager : MonoBehaviourPunCallbacks
         enemy.Alive();
     }
 
-    /*public void AppPlayer(Player _player)
-    {
-        players.Add(_player);
-    }*/
-
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(1);
     }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)/////Poleznay Shtuka
     {
         base.OnPlayerEnteredRoom(newPlayer);
-        PV.RPC("SynchronizingDataPlayers", RpcTarget.AllBuffered, "gg");
+        //PV.RPC("SynchronizingDataPlayers", RpcTarget.AllBuffered, "gg");
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
-        base.OnPlayerLeftRoom(otherPlayer);
+
     }
 
-    public void PushStart()
+    /*[PunRPC]
+    public void MasterClientSetID()
     {
-        Inicilization(ClassPrefab[NumClass]);
-    }
-
-    public void SetNumClass(int N)///player player
-    {
-        NumClass = N;
-    }
-
-    void Inicilization(GameObject create)
-    {
-        Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
-        GameObject PlayerOb = PhotonNetwork.Instantiate(create.name, randomPosition, Quaternion.identity);
-        Camera.main.GetComponent<CameraControl>().target = PlayerOb.transform;
-        MyPlayer = PlayerOb.GetComponent<Player>();
-        if (PhotonNetwork.IsMasterClient)
-        {
-            SpawnWave();
+        for (int i = 0; i < players.Count; i++) {
+            PV.RPC("ClientSetID", RpcTarget.MasterClient,i);
         }
     }
 
+    [PunRPC]
+    public void ClientSetID(int ID)
+    {
+        //MyPlayer.SetID(ID);
+    }*/
+
     public void SpawnWave()
     {
+        startSpawnWave = true;
         Wave++;
         for (int i = 0;i < Wave; i++)
         {
@@ -137,7 +102,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         timeToWave = 0;
         PV.RPC("SetInfoWave", RpcTarget.AllBuffered, Wave);
-        Invoke("SpawnWave", (Wave + TimeBetweenWaves));
+        Resurrection();
+        Invoke("SpawnWave", (Wave * 3 + TimeBetweenWaves));
     }
 
     [PunRPC]
@@ -145,6 +111,38 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         timeToWave = 0;
         Wave = _Wave;
+    }
+
+    [PunRPC]
+    public void RequestMasterDataWave()
+    {
+        PV.RPC("SynchronizingDataWave", RpcTarget.AllBuffered,Wave,timeToWave);
+    }
+
+    [PunRPC]
+    public void SynchronizingDataWave(int _Wave, float _timeToWave)
+    {
+        timeToWave = _timeToWave;
+        Wave = _Wave;
+    }
+
+    public void PlayerDie(int ID)
+    {
+        players[ID].Die();
+        diePlayersID.Add(ID);
+    }
+
+    public void Resurrection()
+    {
+        for(int i = 0; i < diePlayersID.Count; i++)
+        {
+            players[diePlayersID[i]].Resurrection();
+            players[diePlayersID[i]].Hp = players[diePlayersID[i]].MaxHp;
+            players[diePlayersID[i]].Mana = players[diePlayersID[i]].MaxMana;
+            Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
+            players[diePlayersID[i]].transform.position = randomPosition;
+        }
+        diePlayersID.Clear();
     }
 
     public void InstEnemy()

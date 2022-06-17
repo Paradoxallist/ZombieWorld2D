@@ -67,7 +67,7 @@ public enum StatType
     ManaRegen,
     Damage,
     Speed,
-    DelayAttack
+    AttackSpeed
 }
 
 [System.Serializable]

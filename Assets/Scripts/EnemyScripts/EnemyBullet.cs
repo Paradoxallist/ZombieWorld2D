@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class EnemyBullet : Bullet
 {
-    private Enemy enemy;
+    private float enemyDamage;
 
     void Start()
     {
@@ -19,7 +19,7 @@ public class EnemyBullet : Bullet
 
     public void SetEnemy(Enemy _enemy)
     {
-        enemy = _enemy;
+        enemyDamage = _enemy.Damage;
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
@@ -31,8 +31,11 @@ public class EnemyBullet : Bullet
         if (coll.tag == "Player")
         {
             Player player = coll.GetComponent<Player>();
-            player.TakeDamage(enemy.Damage);
-            DestroyHimself();
+            if (player != null)
+            {
+                player.TakeDamage(enemyDamage);
+                DestroyHimself();
+            }
         }
     }
 }

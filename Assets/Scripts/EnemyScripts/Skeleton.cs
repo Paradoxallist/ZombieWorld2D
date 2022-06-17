@@ -16,29 +16,33 @@ public class Skeleton : Enemy
     {
         StartEnemy();
         RandomPosition = new GameObject();
+        RandomPosition.transform.SetParent(transform);
         timeWithoutChangeRandomTarget = 0;
     }
 
     void Update()
     {
         UpdateEnemy();
-        if (victim != null && !GetVariableStun())
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (Vector2.Distance(victim.transform.position, transform.position) < AgrRange && Vector2.Distance(victim.transform.position, transform.position) > RangeAttack)
+            if (victim != null && !GetVariableStun())
             {
-                SetTarget(victim.transform);
-            }
-            else// if(Vector2.Distance(victim.transform.position, transform.position) > MinRangeAttack)
-            {
-                timeWithoutChangeRandomTarget += Time.deltaTime;
-                if (timeWithoutChangeRandomTarget > 1)
-                    GoRandomPosition();
-            }
-            if (AttackSpeed < GetTimeWithoutAttack())
-            {
-                if (Vector2.Distance(victim.transform.position, transform.position) < RangeAttack)
+                if (Vector2.Distance(victim.transform.position, transform.position) < AgrRange && Vector2.Distance(victim.transform.position, transform.position) > RangeAttack)
                 {
-                    Attack();
+                    SetTarget(victim.transform);
+                }
+                else// if(Vector2.Distance(victim.transform.position, transform.position) > MinRangeAttack)
+                {
+                    timeWithoutChangeRandomTarget += Time.deltaTime;
+                    if (timeWithoutChangeRandomTarget > 1)
+                        GoRandomPosition();
+                }
+                if (AttackSpeed < GetTimeWithoutAttack())
+                {
+                    if (Vector2.Distance(victim.transform.position, transform.position) < RangeAttack)
+                    {
+                        Attack();
+                    }
                 }
             }
         }
@@ -54,7 +58,7 @@ public class Skeleton : Enemy
 
     public override void Attack()
     {
-        GameObject bulletGameoject = PhotonNetwork.Instantiate(EnemyBulletOb.name, transform.position, Quaternion.identity);
+        GameObject bulletGameoject = PhotonNetwork.InstantiateRoomObject(EnemyBulletOb.name, transform.position, Quaternion.identity);
         EnemyBullet b = bulletGameoject.GetComponent<EnemyBullet>();
         b.SetRange(RangeBulletFlying);
         b.SetEnemy(this);
@@ -73,8 +77,7 @@ public class Skeleton : Enemy
         }
         else
         {
-            player.Score += Prize;
-            Destroy(RandomPosition);
+            player.SetScore(player.Score + Prize);
             DestroyHimself();
         }
     }
