@@ -48,12 +48,13 @@ public class Bullet : MonoBehaviour
 
     public void DestroyHimself()
     {
-        PhotonNetwork.Destroy(gameObject);
+        PV.RPC("DestroyBullet", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
     public void DestroyBullet()
     {
-        PhotonNetwork.Destroy(gameObject);
+        if (PV.IsMine)
+            PhotonNetwork.Destroy(PV);
     }
 }

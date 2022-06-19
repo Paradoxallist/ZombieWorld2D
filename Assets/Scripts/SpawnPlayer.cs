@@ -10,8 +10,7 @@ public class SpawnPlayer : MonoBehaviour
 
     private Player MyPlayer;
     private int NumClass;
-    public InformationUpdate Info;
-    public Store store;
+    public CanvasManager CanvasManager;
 
     public void SetNumClass(int N)
     {
@@ -29,12 +28,16 @@ public class SpawnPlayer : MonoBehaviour
         GameObject PlayerOb = PhotonNetwork.Instantiate(create.name, randomPosition, Quaternion.identity);
         Camera.main.GetComponent<CameraControl>().target = PlayerOb.transform;
         MyPlayer = PlayerOb.GetComponent<Player>();
-        Info.SetMyPlayer(MyPlayer);
-        store.SetMyPlayer(MyPlayer);
         MyPlayer.SetID(GameManager.Instance.players.Count);
+        CanvasManager.SetMyPlayer(MyPlayer);
         if (PhotonNetwork.IsMasterClient)
         {
             GameManager.Instance.SpawnWave();
+            GameManager.Instance.MasterClientSetID();
+        }
+        else
+        {
+            GameManager.Instance.PV.RPC("MasterClientSetID", RpcTarget.MasterClient);
         }
     }
 }

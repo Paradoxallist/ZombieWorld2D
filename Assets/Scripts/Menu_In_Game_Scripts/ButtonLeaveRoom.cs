@@ -8,6 +8,6 @@ public class ButtonLeaveRoom : MonoBehaviour
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel(0);
     }
 }

@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Store : MonoBehaviour
 {
-    public Player myPlayer;
+    private Player myPlayer;
     [SerializeField]
     private ButtonBuyStats buttonBuyStatsPrefab;
     [SerializeField] 
     private Transform content;
+    [SerializeField]
+    private TMP_Text textLevel;
     private List<ButtonBuyStats> buttonBuyStatsList;
 
     public static Store Instance;
@@ -35,7 +38,7 @@ public class Store : MonoBehaviour
         for(int i = 0; i < myPlayer.Stats.Count; i++)
         {
             ButtonBuyStats buttonItem = Instantiate(buttonBuyStatsPrefab, content);
-            buttonItem.NumStat = i;
+            buttonItem.SetNumStat(i);
             buttonBuyStatsList.Add(buttonItem);
             UpdateInfo(i);
         }
@@ -43,20 +46,28 @@ public class Store : MonoBehaviour
     
     public void UpdateStat(int N)
     {
-        if (myPlayer.Score >= myPlayer.Stats[N].ValuePrice && myPlayer.Stats[N].Level < myPlayer.Stats[N].MaxLevel)
+        if (myPlayer.Score >= myPlayer.Stats[N].ValuePrice && myPlayer.Stats[N].Level < myPlayer.Stats[N].MaxLevel && myPlayer.Stats[N].Level < myPlayer.Levels.Level * 2)
         {
             myPlayer.Score -= myPlayer.Stats[N].ValuePrice;
             myPlayer.LevelUpStat((StatType)N);
-            for (int i = 0; i < myPlayer.Stats.Count; i++)
-            {
-                UpdateInfo(i);
-            }
         }
     }
 
     private void UpdateInfo(int i)
     {
-        buttonBuyStatsList[i].UpdateInformation(myPlayer.Stats[i].StatType.ToString() + "(" + myPlayer.Stats[i].Value + ")" , myPlayer.Stats[i].Level + "(" + myPlayer.Stats[i].MaxLevel + ")", myPlayer.Stats[i].ValuePrice.ToString());
+        buttonBuyStatsList[i].UpdateInformation(myPlayer.Stats[i].StatType.ToString() + $"({Mathf.Round(myPlayer.Stats[i].Value * 100) * 0.01f})" ,
+            "lvl:" + myPlayer.Stats[i].Level + $"({(myPlayer.Levels.Level * 2 <  myPlayer.Stats[i].MaxLevel ? myPlayer.Levels.Level * 2 : myPlayer.Stats[i].MaxLevel)})",
+            myPlayer.Stats[i].ValuePrice.ToString() + " gold",
+            myPlayer.Stats[i].SpriteStat);
     }
 
+
+    private void Update()
+    {
+        textLevel.text = $"Level: {myPlayer.Levels.Level} ({myPlayer.Ex} \\ {myPlayer.Levels.ValuePriceEX})"; 
+        for (int i = 0; i < myPlayer.Stats.Count; i++)
+        {
+            UpdateInfo(i);
+        }
+    }
 }

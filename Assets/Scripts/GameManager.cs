@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-    /*[PunRPC]
+    [PunRPC]
     public void MasterClientSetID()
     {
         for (int i = 0; i < players.Count; i++) {
@@ -89,8 +89,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void ClientSetID(int ID)
     {
-        //MyPlayer.SetID(ID);
-    }*/
+        players[ID].SetID(ID);
+    }
 
     public void SpawnWave()
     {
@@ -136,13 +136,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         for(int i = 0; i < diePlayersID.Count; i++)
         {
-            players[diePlayersID[i]].Resurrection();
-            players[diePlayersID[i]].Hp = players[diePlayersID[i]].MaxHp;
-            players[diePlayersID[i]].Mana = players[diePlayersID[i]].MaxMana;
-            Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
-            players[diePlayersID[i]].transform.position = randomPosition;
+            if (players[diePlayersID[i]] != null)
+            {
+                PV.RPC("RespawnPositionPlayerPun", RpcTarget.AllBuffered, diePlayersID[i]);
+                players[diePlayersID[i]].Resurrection();
+            }
         }
         diePlayersID.Clear();
+    }
+
+    [PunRPC]
+    public void RespawnPositionPlayerPun(int i)
+    {
+        Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
+        players[i].transform.position = randomPosition;
     }
 
     public void InstEnemy()
@@ -156,6 +163,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyPrefab[RandomIndex].name, EnemyPosition, Quaternion.identity);
                 //GameObject en = PhotonNetwork.Instantiate(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
                 Enemy enemy = en.GetComponent<Enemy>();
+                enemy.LevelUpWave(Wave);
                 enemies.Add(enemy);
             }
         }

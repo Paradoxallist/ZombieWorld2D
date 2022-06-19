@@ -13,6 +13,7 @@ public class MenuManager : MonoBehaviourPunCallbacks
     public TMP_InputField Name;
     public GameObject Menu;
     public GameObject PanelConnect;
+    public GameObject ConnectingImageGameObject;
 
 
     private bool SetName;
@@ -24,9 +25,14 @@ public class MenuManager : MonoBehaviourPunCallbacks
     {
         SetName = false;
         listItems = new List<ListItem>();
-        PhotonNetwork.GameVersion = "0.00.015";
-        PhotonNetwork.ConnectUsingSettings();
-        PhotonNetwork.JoinLobby();
+        Screen.fullScreen = true;
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.GameVersion = Application.version;
+            //PhotonNetwork.ConnectToRegion("ru");
+            PhotonNetwork.ConnectUsingSettings();
+            PhotonNetwork.ConnectToRegion("ru");
+        }
     }
 
     private void Update()
@@ -68,10 +74,10 @@ public class MenuManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        foreach (var item in listItems)
+        /*foreach (var item in listItems)
         {
             Destroy(item.gameObject);
-        }
+        }*/
 
         foreach (RoomInfo roomInfo in roomList)
         {
@@ -79,5 +85,13 @@ public class MenuManager : MonoBehaviourPunCallbacks
             if (listItem != null)
                 listItem.SetInfo(roomInfo);
         }
+        //listItems.Clear();
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        ConnectingImageGameObject.SetActive(false);
+        Menu.SetActive(true);
+        PhotonNetwork.JoinLobby();
     }
 }
