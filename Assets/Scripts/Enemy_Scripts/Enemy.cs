@@ -7,62 +7,61 @@ using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
-    public float MaxHp;
-    public float Hp;
-    public float Damage;
-    public float RangeAttack;
-    public float AttackSpeed;
-    private float timeWithoutAttack;
-    public float Speed;
+    [SerializeField]
+    protected float MaxHp;
+    protected float Hp;
+    [SerializeField]
+    protected float Damage;
+    [SerializeField]
+    protected float RangeAttack;
+    [SerializeField]
+    protected float AttackSpeed;
+    [SerializeField]
+    protected float Speed;
+    [SerializeField]
+    protected float RotationSpeed;
+    [SerializeField]
+    protected float Prize;
+    [SerializeField]
+    protected float PrizeEX;
+    [SerializeField]
+    protected PhotonView PV;
+    [SerializeField]
+    protected AIPath aIPath;
+    [SerializeField]
+    protected AIDestinationSetter destinationSetter;
+    [SerializeField]
+    protected BarCharacter hpBar;
+    [SerializeField]
+    protected Text HP_Text;
+    [SerializeField]
+    protected GameObject EnemyBody;
+    [SerializeField]
+    protected SpriteRenderer EnemySpriteBody;
+    [SerializeField]
+    protected float AgrRange;
 
-    public float xMax, yMax, xMin, yMin;
+    public float xMax, yMax, xMin, yMin;//potom
 
-    public float RotationSpeed;
+    protected Player victim;
+    protected float timeWithoutAttack;
 
-    public float Prize;
-    public float PrizeEX;
-
-    //private List<Player> attackedPlayers;
-    //private Rigidbody2D rb;
-    private AIPath aIPath;
-    private AIDestinationSetter destinationSetter; 
-    //public Transform victim;
-
-    public BarCharacter hpBar;
-    public PhotonView PV;
-    //public EnemyAgr agr;
-
-    public Text HP_Text;
-    public GameObject EnemyBody;
-    public SpriteRenderer EnemySpriteBody;
-    public Player victim;
-
-    public float AgrRange;
-
-    private bool stun;
 
     public void StartEnemy()
     {
-        //rb = GetComponent<Rigidbody2D>();
-        aIPath = GetComponent<AIPath>();
-        destinationSetter = GetComponent<AIDestinationSetter>();
         Hp = MaxHp;
         hpBar.SetMaxValue(MaxHp,Hp);
-        //attackedPlayers = new List<Player>();
         aIPath.maxSpeed = Speed;
-        //Send();
     }
 
     public void SetTarget(Transform target)
     {
         destinationSetter.target = target;
     }
-
     public void SetTimeWithoutAttack(float newTime)
     {
         timeWithoutAttack = newTime;
     }
-
     public float GetTimeWithoutAttack()
     {
         return timeWithoutAttack;
@@ -96,28 +95,6 @@ public abstract class Enemy : MonoBehaviour
 
     public abstract void TakeDamage(float _damage, Player player);
 
-    public abstract void LevelUpWave(int Wave);
-    public bool GetVariableStun()
-    {
-        return stun;
-    }
-
-    [PunRPC]
-    public void StunPun(float timeStun)
-    {
-        EnemySpriteBody.color = Color.black;
-        stun = true;
-        aIPath.maxSpeed = 0;
-        Invoke("StopStun", timeStun);
-    }
-
-    public void StopStun()
-    {
-        EnemySpriteBody.color = Color.white;
-        aIPath.maxSpeed = Speed;
-        stun = false;
-    }
-
     [PunRPC]
     public void SetHp(float _hp)
     {
@@ -125,7 +102,7 @@ public abstract class Enemy : MonoBehaviour
         HP_Text.text = Hp + "/" + MaxHp;
     }
 
-    public void Alive()
+    public void CheckAlive()
     {
         if(Hp <= 0)
         {
@@ -133,47 +110,35 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    public void DestroyHimself()
-    {
-        if (PhotonNetwork.IsMasterClient)
-            PhotonNetwork.Destroy(PV);
-        else
-            PV.RPC("DestroyEnemy", RpcTarget.MasterClient);
+    public abstract void DestroyHimself();
 
-    }
     [PunRPC]
     public void DestroyEnemy()
     {
-        PhotonNetwork.Destroy(PV);
-    }
-
-    [PunRPC]
-    public void SynchronizingDataEnemy(float maxHp,float hp, float damage)
-    {
-        MaxHp = maxHp;
-        Hp = hp;
-        Damage = damage;
+        if (PV.IsMine)
+            PhotonNetwork.Destroy(PV);
     }
 
     private void SearchVictim()
     {
-        Player NearPlaer = null;
-        float distanse = Mathf.Infinity;
+        Player nearestPlayer = null;
+        float minDistance = Mathf.Infinity;
         foreach (Player player in GameManager.Instance.players)
         {
             if (player != null && player.gameObject.activeSelf)
             {
-                float dist = Vector2.Distance(transform.position, player.transform.position);
-                if (dist < distanse && dist < AgrRange)
+                float distance = Vector2.Distance(transform.position, player.transform.position);
+                if (distance < minDistance && distance < AgrRange)
                 {
-                    distanse = dist;
-                    NearPlaer = player;
+                    minDistance = distance;
+                    nearestPlayer = player;
                 }
             }
         }
-        if (NearPlaer != null)
+        if (nearestPlayer != null)
         {
-            victim = NearPlaer;
+            victim = nearestPlayer;
         }
     }
+    public PhotonView photonView => PV;
 }

@@ -6,13 +6,14 @@ using TMPro;
 
 public class Sniper : Player
 {
-    public GameObject BulletOb;
-    //private Vector3 bulletFuturePosition;
+    public SniperBullet BulletObject;
 
     public float RangeAttack;
 
     public int CountBullet;
     public float angel;
+    public float attackSpeedBoost;
+    
 
     private bool abilityTwoActive;
 
@@ -27,20 +28,27 @@ public class Sniper : Player
         UpdatePlayer();
         if (photonView.IsMine)
         {
-            if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > AttackSpeed)
+            if (!abilityTwoActive)
             {
-                SetTimeWitoutAttack(0);
-                /*bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                bulletFuturePosition.z = transform.position.z;*/
-                Attack();
+                if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > GetPlayerStat(StatType.AttackSpeed).Value)
+                {
+                    SetTimeWitoutAttack(0);
+                    Attack();
+                }
             }
-            if (abilityTwoActive)
+            else 
             {
-                Mana -= CostAbilityTwo * Time.deltaTime;
+                if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > GetPlayerStat(StatType.AttackSpeed).Value / attackSpeedBoost)
+                {
+                    SetTimeWitoutAttack(0);
+                    Attack();
+                }
+
+                Mana -= GetPlayerStat(StatType.CostAbilityTwo).Value * Time.deltaTime;
                 photonView.RPC("SetManaPun", RpcTarget.AllBuffered, Mana);
                 if (Mana < 0)
                 {
-                    AbilityTwo();
+                    UseAbilityTwo();
                 }
             }
         }
@@ -48,24 +56,8 @@ public class Sniper : Player
 
     public override void Attack()
     {
-        Vector3 bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        bulletFuturePosition.z = transform.position.z;
-
-        GameObject bulletGameoject = PhotonNetwork.Instantiate(BulletOb.name, transform.position, Quaternion.identity);
-        SniperBullet b = bulletGameoject.GetComponent<SniperBullet>();
-        b.SetRange(RangeAttack);
-        b.SetPlayer(this);
-        b.SetTargetPositon(bulletFuturePosition);
-    }
-
-    [PunRPC]
-    public void Fire(float x, float y, int ID, float myX,float myY)
-    {
-        GameObject bulletGameoject = PhotonNetwork.InstantiateRoomObject(BulletOb.name, new Vector3(myX,myY,0), Quaternion.identity);
-        SniperBullet b = bulletGameoject.GetComponent<SniperBullet>();
-        b.SetRange(RangeAttack);
-        b.SetPlayer(GameManager.Instance.players[ID]);
-        b.SetTargetPositon(new Vector3(x, y, 0));
+        Vector2 bulletFuturePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        InstantiateBullet(bulletFuturePosition);
     }
 
     public override void TakeDamage(float _damage)
@@ -75,44 +67,48 @@ public class Sniper : Player
         {
             abilityTwoActive = false;
         }
-        Alive();
+        CheckAlive();
         photonView.RPC("SetHpPun", RpcTarget.AllBuffered, Hp);
     }
 
-    public override void AbilityOne()
+    public override void UseAbilityOne()
     {
-        if (Mana > CostAbilityOne)
+        if (Mana > GetPlayerStat(StatType.CostAbilityOne).Value)
         {
-            Mana -= CostAbilityOne;
+            Mana -= GetPlayerStat(StatType.CostAbilityOne).Value;
             photonView.RPC("SetManaPun", RpcTarget.AllBuffered, Mana);
             Vector3 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
             float startAngel = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             for (float i = - ((float)CountBullet - 1) /2; i <= ((float)CountBullet - 1) / 2; i++)
             {
-                GameObject bulletGameoject = PhotonNetwork.Instantiate(BulletOb.name, transform.position, Quaternion.identity);
-                SniperBullet b = bulletGameoject.GetComponent<SniperBullet>();
-                b.SetRange(RangeAttack);
-                b.SetPlayer(this);
                 Vector2 target = new Vector2(Mathf.Cos((Mathf.PI / 180) * ((angel / CountBullet) * i + startAngel)), Mathf.Sin((Mathf.PI / 180) * ((angel / CountBullet) * i + startAngel))) + (Vector2)transform.position;
-                b.SetTargetPositon(target);
+                InstantiateBullet(target);
             }
         }
     }
-    public override void AbilityTwo() // ychituvat procaxhky
+
+    private void InstantiateBullet(Vector2 targetPosition)
+    {
+        GameObject bulletGameoject = PhotonNetwork.Instantiate(BulletObject.name, transform.position, Quaternion.identity);
+        SniperBullet b = bulletGameoject.GetComponent<SniperBullet>();
+        b.SetRange(RangeAttack);
+        b.SetPlayer(this);
+        b.SetTargetPositon(targetPosition);
+    }
+
+    public override void UseAbilityTwo()
     {
         if (abilityTwoActive)
         {
             abilityTwoActive = false;
-            PlayerSpriteBody.color = Color.white;
+            //PlayerSpriteBody.color = Color.white;
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 1f, 1f);
-            AttackSpeed *= 4;
         }
-        else if (!abilityTwoActive & Mana > CostAbilityTwo)
+        else if (Mana > GetPlayerStat(StatType.CostAbilityTwo).Value)
         {
             abilityTwoActive = true;
-            PlayerSpriteBody.color = new Color(1f, 0.8f, 0f);
+            //PlayerSpriteBody.color = new Color(1f, 0.8f, 0f);
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 0.8f, 0f);
-            AttackSpeed /= 4;
         }
     }
 
@@ -130,14 +126,6 @@ public class Sniper : Player
         abilityTwoActive = false;
     }*/
 
-    public override void UpdateStats()
-    {
-        UpdateStandartStats();
-        if (abilityTwoActive)
-        {
-            AttackSpeed /= 3;
-        }
-    }
 
 
     public override void LevelUpStat(StatType statType)

@@ -5,7 +5,8 @@ using Photon.Pun;
 
 public class Bullet : MonoBehaviour
 {
-    public float Speed;
+    [SerializeField]
+    private float speed;
 
     private Vector2 targetPosition;
     private Vector2 startPos;
@@ -23,9 +24,9 @@ public class Bullet : MonoBehaviour
     public void UpdateBullet()
     {
         if (!isMove) {return; }
-        time += Speed * Time.deltaTime;
+        time += speed * Time.deltaTime;
         transform.position = Vector2.MoveTowards(startPos, targetPosition, time);
-        if ((Vector2)transform.position == targetPosition)
+        if ((Vector2)transform.position == targetPosition)///mayve bag (use distanse)
         {
             DestroyHimself();
         }
@@ -54,7 +55,7 @@ public class Bullet : MonoBehaviour
     [PunRPC]
     public void DestroyBullet()
     {
-        if (PV.IsMine)
+        if (PV.IsMine && PV != null)
             PhotonNetwork.Destroy(PV);
     }
 }

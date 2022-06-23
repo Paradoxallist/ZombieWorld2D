@@ -8,11 +8,16 @@ public class CameraControl : MonoBehaviour
 	public float indentX, indentY;
 
 	[SerializeField]
-	public Transform target;
+	private Transform target;
 
 	void Update()
 	{
 		if (target != null)
 			transform.position = new Vector3(Mathf.Clamp(target.position.x, xMin, xMax) + indentX, Mathf.Clamp(target.position.y, yMin, yMax) + indentY, transform.position.z);
 	}
+
+	public void SetTarget(Transform _target)
+    {
+		target = _target;
+    }
 }

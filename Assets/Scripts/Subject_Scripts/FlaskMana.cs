@@ -1,23 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class FlaskMana : Flask
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void TouchPlayer(Player player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public override void TouchPlayer()
-    {
-        throw new System.NotImplementedException();
+        if (player.GetMana() < player.GetPlayerStat(StatType.MaxMana).Value)
+        {
+            player.GetPhotonView().RPC("SetManaPun", RpcTarget.AllBuffered, (player.GetMana() + Effect));
+            DestroyHimself();
+        }
     }
 }

@@ -36,7 +36,7 @@ public class Zilot : Player
         UpdatePlayer();
         if (photonView.IsMine)
         {
-            if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > AttackSpeed)
+            if (Input.GetMouseButton(0) && GetTimeWitoutAttack() > GetPlayerStat(StatType.AttackSpeed).Value)
             {
                 SetTimeWitoutAttack(0);
                 Attack();
@@ -52,11 +52,11 @@ public class Zilot : Player
             }
             if (abilityTwoActive)
             {
-                Mana -= CostAbilityTwo * Time.deltaTime;
+                Mana -= GetPlayerStat(StatType.CostAbilityTwo).Value * Time.deltaTime;
                 photonView.RPC("SetManaPun", RpcTarget.AllBuffered, Mana);
                 if (Mana < 0)
                 {
-                    AbilityTwo();
+                    UseAbilityTwo();
                 }
             }
         }
@@ -75,7 +75,7 @@ public class Zilot : Player
                 abilityOneActive = false;
                 abilityTwoActive = false;
             }
-            Alive();
+            CheckAlive();
             photonView.RPC("SetHpPun", RpcTarget.AllBuffered, Hp);
         }
     }
@@ -100,35 +100,35 @@ public class Zilot : Player
         SwordAttack.gameObject.SetActive(status);
     }
 
-    public override void AbilityOne()
+    public override void UseAbilityOne()
     {
         
-        if (Mana > CostAbilityOne && !abilityOneActive && !inWall)
+        if (Mana > GetPlayerStat(StatType.CostAbilityOne).Value && !abilityOneActive && !inWall)
         {
-            Mana -= CostAbilityOne;
+            Mana -= GetPlayerStat(StatType.CostAbilityOne).Value;
             photonView.RPC("SetManaPun", RpcTarget.AllBuffered, Mana);
             abilityOneActive = true;
             StartPosition = transform.position;
             Vector2 direction = ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position).normalized;
             DeshPosition = direction * LengthDesh + (Vector2)transform.position;
-            PlayerSpriteBody.color = Color.red;
+            //PlayerSpriteBody.color = Color.red;
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 0f, 0f);
         }
     }
 
-    public override void AbilityTwo()
+    public override void UseAbilityTwo()
     {
         if (abilityTwoActive)
         {
             abilityTwoActive = false;
-            PlayerSpriteBody.color = Color.white;
+            //PlayerSpriteBody.color = Color.white;
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f,1f,1f);
             Defens -= AbilityDefens;
         }
-        else if(!abilityTwoActive & Mana > CostAbilityTwo)
+        else if(!abilityTwoActive & Mana > GetPlayerStat(StatType.CostAbilityTwo).Value)
         {
             abilityTwoActive = true;
-            PlayerSpriteBody.color = new Color(0f,1f,1f);
+            //PlayerSpriteBody.color = new Color(0f,1f,1f);
             photonView.RPC("SetColor", RpcTarget.AllBuffered, 0f,1f,1f);
             Defens += AbilityDefens;
         }
@@ -161,10 +161,10 @@ public class Zilot : Player
         abilityOneActive = false;
         photonView.RPC("SetColor", RpcTarget.AllBuffered, 1f, 1f, 1f);
     }
-    public override void UpdateStats()
+    /*public override void UpdateStats()
     {
-        UpdateStandartStats();
-    }
+
+    }*/
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
@@ -180,10 +180,10 @@ public class Zilot : Player
         {
             if (abilityOneActive)
             {
-                Enemy enemy = coll.GetComponent<Enemy>();
-                StunDamage = Damage * 2;
+                BaseEnemy enemy = coll.GetComponent<BaseEnemy>();
+                StunDamage = GetPlayerStat(StatType.Damage).Value * 2;
                 enemy.TakeDamage(StunDamage,this);
-                enemy.PV.RPC("StunPun", RpcTarget.AllBuffered,TimeStun);
+                enemy.photonView.RPC("StunPun", RpcTarget.AllBuffered,TimeStun);
                 StopDash();
             }
         }

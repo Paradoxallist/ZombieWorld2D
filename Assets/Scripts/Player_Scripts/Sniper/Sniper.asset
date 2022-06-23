@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 002cc8c19dcae4745a9477e04e59779c, type: 3}
+  m_Name: Sniper
+  m_EditorClassIdentifier: 
+  playerLevel:
+    valuePriceEx: 20
+    modifierPriceEx: 20
+    maxLevel: 50
+    level: 1
+  stats:
+  - statType: 0
+    modifierType: 0
+    value: 50
+    modifier: 10
+    valuePrice: 20
+    modifierPrice: 20
+    maxLevel: 100
+    level: 0
+    spriteStat: {fileID: 21300000, guid: 9330e20fd290e004badc2e7fd8efecf0, type: 3}
+  - statType: 1
+    modifierType: 0
+    value: 1
+    modifier: 0.25
+    valuePrice: 75
+    modifierPrice: 75
+    maxLevel: 10
+    level: 0
+    spriteStat: {fileID: 21300000, guid: 4ffa6920fdf466e499e12017e44680b8, type: 3}
+  - statType: 2
+    modifierType: 0
+    value: 100
+    modifier: 10
+    valuePrice: 50
+    modifierPrice: 25
+    maxLevel: 100
+    level: 0
+    spriteStat: {fileID: 21300000, guid: 2c49a848aea9e3744b6b29f4b049a0c9, type: 3}
+  - statType: 3
+    modifierType: 0
+    value: 2
+    modifier: 0.25
+    valuePrice: 50
+    modifierPrice: 50
+    maxLevel: 10
+    level: 0
+    spriteStat: {fileID: 21300000, guid: 63b0db0413ecebe47994b68c53b8bf9a, type: 3}
+  - statType: 4
+    modifierType: 0
+    value: 35
+    modifier: 10
+    valuePrice: 25
+    modifierPrice: 25
+    maxLevel: 100
+    level: 0
+    spriteStat: {fileID: 21300000, guid: 991ad05805284a642b9c30282a0a0956, type: 3}
+  - statType: 5
+    modifierType: 0
+    value: 4
+    modifier: 0.25
+    valuePrice: 100
+    modifierPrice: 100
+    maxLevel: 8
+    level: 0
+    spriteStat: {fileID: 21300000, guid: bde3e08968a33af4386655d385c27ada, type: 3}
+  - statType: 6
+    modifierType: 0
+    value: 1
+    modifier: -0.05
+    valuePrice: 50
+    modifierPrice: 50
+    maxLevel: 10
+    level: 0
+    spriteStat: {fileID: 21300000, guid: b41bc74b3d1131644b8c53ef4f615715, type: 3}
+  - statType: 7
+    modifierType: 0
+    value: 20
+    modifier: 0
+    valuePrice: 0
+    modifierPrice: 0
+    maxLevel: 0
+    level: 0
+    spriteStat: {fileID: 21300000, guid: b41bc74b3d1131644b8c53ef4f615715, type: 3}
+  - statType: 8
+    modifierType: 0
+    value: 1
+    modifier: 0
+    valuePrice: 0
+    modifierPrice: 0
+    maxLevel: 0
+    level: 0
+    spriteStat: {fileID: 21300000, guid: b41bc74b3d1131644b8c53ef4f615715, type: 3}
+  - statType: 9
+    modifierType: 0
+    value: 8
+    modifier: 0
+    valuePrice: 0
+    modifierPrice: 0
+    maxLevel: 0
+    level: 0
+    spriteStat: {fileID: 21300000, guid: b41bc74b3d1131644b8c53ef4f615715, type: 3}
+  - statType: 10
+    modifierType: 0
+    value: 0
+    modifier: 0
+    valuePrice: 0
+    modifierPrice: 0
+    maxLevel: 0
+    level: 0
+    spriteStat: {fileID: 21300000, guid: b41bc74b3d1131644b8c53ef4f615715, type: 3}

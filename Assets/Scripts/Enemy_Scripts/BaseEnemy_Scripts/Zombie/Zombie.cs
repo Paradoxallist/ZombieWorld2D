@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Zombie : Enemy
+public class Zombie : BaseEnemy
 {
     void Start()
     {
@@ -12,7 +12,7 @@ public class Zombie : Enemy
 
     void Update()
     {
-        UpdateEnemy();
+        UpdateBaseEnemy();
         if (PhotonNetwork.IsMasterClient)
         {
             if (victim != null && !GetVariableStun())
@@ -56,7 +56,7 @@ public class Zombie : Enemy
         MaxHp = Mathf.Round(Mathf.Pow(Wave, 1 / 4f) * MaxHp);
         Speed = Mathf.Round(Mathf.Pow(Wave, 1 / 4f) * Speed * 100) * 0.01f;
         AttackSpeed = Mathf.Round(AttackSpeed / Mathf.Pow(Wave, 1 / 6f) * 1000)* 0.001f;*/
-        Damage = Damage + (Wave - 1) * 1.5f;
+        Damage = Damage + (Wave - 1) * 2f;
         MaxHp = MaxHp + (Wave - 1) * 4f;
         Hp = MaxHp;
         PV.RPC("SynchronizingDataEnemy", RpcTarget.AllBuffered, MaxHp, Hp, Damage);

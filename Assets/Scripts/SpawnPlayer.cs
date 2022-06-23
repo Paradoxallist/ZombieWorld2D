@@ -6,7 +6,10 @@ using Photon.Pun;
 public class SpawnPlayer : MonoBehaviour
 {
     public List<GameObject> ClassPrefab; 
-    public float minX, minY, maxX, maxY;
+    public float minX, minY, maxX, maxY;//??
+
+    [SerializeField]
+    private CameraControl CameraControl;
 
     private Player MyPlayer;
     private int NumClass;
@@ -26,7 +29,7 @@ public class SpawnPlayer : MonoBehaviour
     {
         Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
         GameObject PlayerOb = PhotonNetwork.Instantiate(create.name, randomPosition, Quaternion.identity);
-        Camera.main.GetComponent<CameraControl>().target = PlayerOb.transform;
+        CameraControl.SetTarget(PlayerOb.transform);
         MyPlayer = PlayerOb.GetComponent<Player>();
         MyPlayer.SetID(GameManager.Instance.players.Count);
         CanvasManager.SetMyPlayer(MyPlayer);

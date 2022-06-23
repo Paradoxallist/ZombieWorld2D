@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class Skeleton : Enemy
+public class Skeleton : BaseEnemy
 {
     public GameObject EnemyBulletOb;
     public float RangeBulletFlying;
@@ -22,7 +22,7 @@ public class Skeleton : Enemy
 
     void Update()
     {
-        UpdateEnemy();
+        UpdateBaseEnemy();
         if (PhotonNetwork.IsMasterClient)
         {
             if (victim != null && !GetVariableStun())
@@ -61,7 +61,7 @@ public class Skeleton : Enemy
         GameObject bulletGameoject = PhotonNetwork.InstantiateRoomObject(EnemyBulletOb.name, transform.position, Quaternion.identity);
         EnemyBullet b = bulletGameoject.GetComponent<EnemyBullet>();
         b.SetRange(RangeBulletFlying);
-        b.SetEnemy(this);
+        b.SetBulletDamage(Damage);
         b.SetTargetPositon(victim.transform.position);
         SetTimeWithoutAttack(0);
     }
@@ -88,8 +88,9 @@ public class Skeleton : Enemy
         MaxHp = Mathf.Round(Mathf.Pow(Wave, 1 / 4f) * MaxHp);
         Speed = Mathf.Round(Mathf.Pow(Wave, 1 / 4f) * Speed * 100) * 0.01f;
         AttackSpeed = Mathf.Round(AttackSpeed / Mathf.Pow(Wave, 1 / 6f) * 1000)* 0.001f;*/
-        Damage = Damage + (Wave - 1) * 1.5f;
+        Damage = Damage + (Wave - 1) * 3f;
         MaxHp = MaxHp + (Wave - 1) * 2f;
+        Hp = MaxHp;
         PV.RPC("SynchronizingDataEnemy", RpcTarget.AllBuffered, MaxHp, Hp,Damage);
         //Speed = Speed + (Wave - 1) * 0.175f;
         //AttackSpeed = Mathf.Clamp(AttackSpeed - (Wave - 1) * 0.025f, 0.5f, 100f);

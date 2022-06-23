@@ -257,25 +257,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHp: 100
-  Hp: 0
   Damage: 40
   RangeAttack: 1.4
   AttackSpeed: 1
   Speed: 3.5
+  RotationSpeed: 3
+  Prize: 10
+  PrizeEX: 2
+  PV: {fileID: 8690077236329382962}
+  aIPath: {fileID: 8966874906471752572}
+  destinationSetter: {fileID: 5516387006968168388}
+  hpBar: {fileID: 2159875406871445398}
+  HP_Text: {fileID: 4712670344054903139}
+  EnemyBody: {fileID: 1402958544325572010}
+  EnemySpriteBody: {fileID: 5129685657447846404}
+  AgrRange: 100
   xMax: 30
   yMax: 30
   xMin: -30
   yMin: -30
-  RotationSpeed: 3
-  Prize: 15
-  PrizeEX: 1
-  hpBar: {fileID: 2159875406871445398}
-  PV: {fileID: 8690077236329382962}
-  HP_Text: {fileID: 4712670344054903139}
-  EnemyBody: {fileID: 1402958544325572010}
-  EnemySpriteBody: {fileID: 5129685657447846404}
-  victim: {fileID: 0}
-  AgrRange: 100
+  Flasks:
+  - {fileID: 5542652182080921439, guid: 3138db0f102e03f4a8353752ced6436e, type: 3}
+  - {fileID: 6428524602460634990, guid: ce45aa31437692f41971671305de7ab7, type: 3}
 --- !u!50 &7980221804484986815
 Rigidbody2D:
   serializedVersion: 4

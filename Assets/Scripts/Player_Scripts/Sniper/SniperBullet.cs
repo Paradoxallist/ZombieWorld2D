@@ -34,7 +34,7 @@ public class SniperBullet : Bullet
                 Enemy enemy = coll.GetComponent<Enemy>();
                 if (player != null)
                 {
-                    enemy.TakeDamage(player.GetDamage(), player);
+                    enemy.TakeDamage(player.GetPlayerStat(StatType.Damage).Value, player);
                 }
                 DestroyHimself(); 
         }

@@ -3259,7 +3259,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1535552974}
         m_TargetAssemblyTypeName: ExitGame, Assembly-CSharp
-        m_MethodName: PushButton
+        m_MethodName: Exit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

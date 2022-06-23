@@ -5,15 +5,20 @@ using TMPro;
 
 public class InformationUpdate : MonoBehaviour
 {
-
-    public BarCharacter HpBar;
-    public TMP_Text TextHpDescription;
-    public BarCharacter ManaBar;
-    public TMP_Text TextManaDescription;
-    public BarCharacter ExBar;
-    public TMP_Text TextLevelDescription;
-
-    public TMP_Text TextWave;
+    [SerializeField]
+    private BarCharacter HpBar;
+    [SerializeField]
+    private TMP_Text TextHpDescription;
+    [SerializeField]
+    private BarCharacter ManaBar;
+    [SerializeField]
+    private TMP_Text TextManaDescription;
+    [SerializeField]
+    private BarCharacter ExBar;
+    [SerializeField]
+    private TMP_Text TextLevelDescription;
+    [SerializeField]
+    private TMP_Text TextWave;
 
     private Player myPlayer;
 
@@ -25,13 +30,13 @@ public class InformationUpdate : MonoBehaviour
     {
         if (myPlayer != null)
         {
-            TextHpDescription.text = ((int)Mathf.Clamp((myPlayer.GetHp()),0f,myPlayer.GetMaxHp())).ToString();
-            HpBar.SetMaxValue(myPlayer.GetMaxHp(), myPlayer.GetHp());
-            TextManaDescription.text = ((int)Mathf.Clamp((myPlayer.GetMana()), 0f, myPlayer.GetMaxMana())).ToString();
-            ManaBar.SetMaxValue(myPlayer.GetMaxMana(), myPlayer.GetMana());
-            ExBar.SetMaxValue(myPlayer.Levels.ValuePriceEX,myPlayer.Ex);
-            TextLevelDescription.text = myPlayer.Levels.Level.ToString();
+            TextHpDescription.text = ((int)Mathf.Clamp((myPlayer.GetHp()),0f,myPlayer.GetPlayerStat(StatType.MaxHp).Value)).ToString();
+            HpBar.SetMaxValue(myPlayer.GetPlayerStat(StatType.MaxHp).Value, myPlayer.GetHp());
+            TextManaDescription.text = ((int)Mathf.Clamp((myPlayer.GetMana()), 0f, myPlayer.GetPlayerStat(StatType.MaxMana).Value)).ToString();
+            ManaBar.SetMaxValue(myPlayer.GetPlayerStat(StatType.MaxMana).Value, myPlayer.GetMana());
+            ExBar.SetMaxValue(myPlayer.Level.ValuePriceEx,myPlayer.GetEx());
+            TextLevelDescription.text = myPlayer.Level.Level.ToString();
         }
-        TextWave.text = "Wave:" + GameManager.Instance.Wave + "(" + (int)(GameManager.Instance.TimeBetweenWaves + GameManager.Instance.Wave * 3 - GameManager.Instance.timeToWave) + ")";
+        TextWave.text = "Wave:" + GameManager.Instance.Wave + "(" + (int)(GameManager.Instance.TimeBetweenWaves + GameManager.Instance.Wave * 3 - GameManager.Instance.TimeToWave) + ")";
     }
 }

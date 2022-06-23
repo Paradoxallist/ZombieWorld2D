@@ -535,7 +535,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6546432985402292846}
         m_TargetAssemblyTypeName: ButtonBuyStats, Assembly-CSharp
-        m_MethodName: PushButton
+        m_MethodName: UpdateStoreStat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

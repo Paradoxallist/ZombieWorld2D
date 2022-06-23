@@ -10,17 +10,22 @@ public class PlayerStat
     [SerializeField]
     private ModifierType modifierType;
 
-    [SerializeField]
-    private float modifier;
+
     public float Value => value;
     [SerializeField]
     private float value;
 
+
+    public float Modifier => modifier;
     [SerializeField]
-    private float modifierPrice;
+    private float modifier;
+
     public float ValuePrice => valuePrice;
     [SerializeField]
     private float valuePrice;
+
+    [SerializeField]
+    private float modifierPrice;
 
     public int MaxLevel => maxLevel;
 
@@ -28,7 +33,7 @@ public class PlayerStat
     private int maxLevel;
     public int Level => level;
     [SerializeField]
-    private int level;
+    private int level = 0;
 
     public Sprite SpriteStat => spriteStat;
     [SerializeField]
@@ -51,13 +56,20 @@ public class PlayerStat
         }
     }
 
-    public PlayerStat(float modifier, float value, int maxLevel, int level, StatType statType)
+    /*public float GetValue()
+    {
+        
+    }*/
+
+    public PlayerStat(float modifier, float valuePrice, float value, int  maxLevel, int level, StatType statType,Sprite spriteStat)
     {
         this.statType = statType;
         this.modifier = modifier;
+        this.valuePrice = valuePrice;   
         this.value = value;
         this.maxLevel = maxLevel;
         this.level = level;
+        this.spriteStat = spriteStat;
     }
 
 }
@@ -71,7 +83,11 @@ public enum StatType
     ManaRegen,
     Damage,
     Speed,
-    AttackSpeed
+    AttackSpeed,
+    CostAbilityOne,
+    CooldownAbilityOne,
+    CostAbilityTwo,
+    CooldownAbilityTwo
 }
 
 [Serializable]

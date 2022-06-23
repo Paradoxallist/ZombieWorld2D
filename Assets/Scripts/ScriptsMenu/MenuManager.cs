@@ -28,10 +28,11 @@ public class MenuManager : MonoBehaviourPunCallbacks
         Screen.fullScreen = true;
         if (!PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.GameVersion = Application.version;
+            //PhotonNetwork.GameVersion = Application.version;
             //PhotonNetwork.ConnectToRegion("ru");
             PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.ConnectToRegion("ru");
+            PhotonNetwork.GameVersion = Application.version;
         }
     }
 

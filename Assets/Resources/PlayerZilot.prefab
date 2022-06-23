@@ -143,77 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4bdcec5809905c46b2908a921975c90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 11400000, guid: 547a57c89800b014b98a431a52d0de37, type: 2}
   Ex: 0
-  CostAbilityOne: 10
-  CostAbilityTwo: 7.5
-  Levels:
-    modifierPriceEX: 12
-    valuePriceEX: 12
-    maxLevel: 100
-  Stats:
-  - statType: 0
-    modifierType: 0
-    modifier: 10
-    value: 100
-    modifierPrice: 10
-    valuePrice: 10
-    maxLevel: 100
-    level: 0
-    spriteStat: {fileID: 21300000, guid: 9330e20fd290e004badc2e7fd8efecf0, type: 3}
-  - statType: 1
-    modifierType: 0
-    modifier: 0.5
-    value: 2
-    modifierPrice: 20
-    valuePrice: 20
-    maxLevel: 100
-    level: 0
-    spriteStat: {fileID: 21300000, guid: 4ffa6920fdf466e499e12017e44680b8, type: 3}
-  - statType: 2
-    modifierType: 0
-    modifier: 25
-    value: 100
-    modifierPrice: 20
-    valuePrice: 20
-    maxLevel: 100
-    level: 0
-    spriteStat: {fileID: 21300000, guid: 2c49a848aea9e3744b6b29f4b049a0c9, type: 3}
-  - statType: 3
-    modifierType: 0
-    modifier: 0.5
-    value: 1.5
-    modifierPrice: 25
-    valuePrice: 25
-    maxLevel: 15
-    level: 0
-    spriteStat: {fileID: 21300000, guid: 63b0db0413ecebe47994b68c53b8bf9a, type: 3}
-  - statType: 4
-    modifierType: 0
-    modifier: 5
-    value: 30
-    modifierPrice: 20
-    valuePrice: 20
-    maxLevel: 20
-    level: 0
-    spriteStat: {fileID: 21300000, guid: 70d81189a23b28d499bd7cd918956d15, type: 3}
-  - statType: 5
-    modifierType: 0
-    modifier: 0.05
-    value: 4.75
-    modifierPrice: 10
-    valuePrice: 15
-    maxLevel: 20
-    level: 0
-    spriteStat: {fileID: 21300000, guid: bde3e08968a33af4386655d385c27ada, type: 3}
-  - statType: 6
-    modifierType: 0
-    modifier: -0.05
-    value: 0.75
-    modifierPrice: 50
-    valuePrice: 50
-    maxLevel: 10
-    level: 0
-    spriteStat: {fileID: 21300000, guid: b41bc74b3d1131644b8c53ef4f615715, type: 3}
   photonView: {fileID: 8804289184067383971}
   rb: {fileID: 1042905940}
   NicknameText: {fileID: 3681265164911538028}
@@ -221,7 +152,7 @@ MonoBehaviour:
   manaBar: {fileID: 3191202143203152995}
   PlayerBody: {fileID: 672644326051144728}
   PlayerSpriteBody: {fileID: 672644326051144726}
-  Score: 0
+  Score: 100
   xMax: 30
   yMax: 30
   xMin: -30

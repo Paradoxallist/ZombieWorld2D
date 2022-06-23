@@ -8,7 +8,7 @@ public class Sword : MonoBehaviour
     public Player player;
     public PhotonView photonView;
     public float KickbackForce;
-    private List<Enemy> enemyList = new List<Enemy>();
+    private List<BaseEnemy> enemyList = new List<BaseEnemy>();
 
 
     private void OnTriggerEnter2D(Collider2D coll)
@@ -17,10 +17,10 @@ public class Sword : MonoBehaviour
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                Enemy enemy = coll.GetComponent<Enemy>();
+                BaseEnemy enemy = coll.GetComponent<BaseEnemy>();
                 if (!enemyList.Contains(enemy))
                 {
-                    enemy.TakeDamage(player.GetDamage(), player);
+                    enemy.TakeDamage(player.GetPlayerStat(StatType.Damage).Value, player);
                     enemyList.Add(enemy);
                 }
             }

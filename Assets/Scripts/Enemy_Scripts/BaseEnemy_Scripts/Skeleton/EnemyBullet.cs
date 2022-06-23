@@ -17,18 +17,18 @@ public class EnemyBullet : Bullet
         UpdateBullet();
     }
 
-    public void SetEnemy(Enemy _enemy)
+    public void SetBulletDamage(float Damage)
     {
-        enemyDamage = _enemy.Damage;
+        enemyDamage = Damage;
     }
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
-        if (coll.tag == "Wall")
+        if (coll.CompareTag("Wall"))
         {
             DestroyHimself();
         }
-        if (coll.tag == "Player" && !coll.isTrigger)
+        if (coll.CompareTag("Player") && !coll.isTrigger)
         {
             Player player = coll.GetComponentInParent<Player>();
             if (player != null)

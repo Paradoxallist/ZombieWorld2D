@@ -8,26 +8,31 @@ using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    public static GameManager Instance;
+
     public List<GameObject> EnemyPrefab;
+    public List<GameObject> BossPrefab;
+    private int bossIndex;
 
     public float minX, minY, maxX, maxY;
 
-    public List<Player> players = new List<Player>();
-    private List<int> diePlayersID = new List<int>();
-    public List<Enemy> enemies = new List<Enemy>();
+    public List<Player> players = new();
+    private List<int> diePlayersID = new();
+    public List<BaseEnemy> enemies = new();
     public PhotonView PV;
-    public static GameManager Instance;
     public List<Transform> Spawner;
 
     public int Wave;
     public float TimeBetweenWaves;
-    public float timeToWave;
+    private float timeToWave;
+    public float TimeToWave => timeToWave;
 
     private bool startSpawnWave;
 
     private void Awake()
     {
         Wave = 0;
+        bossIndex = 0;  
         startSpawnWave = false;
         players = new List<Player>();
         if (Instance != this)
@@ -45,10 +50,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         timeToWave += Time.deltaTime;
-        if (PhotonNetwork.IsMasterClient && !startSpawnWave && (TimeBetweenWaves + Wave * 3 - timeToWave) < 0)
+        if(Wave + TimeBetweenWaves < timeToWave && startSpawnWave && PhotonNetwork.IsMasterClient)
         {
             SpawnWave();
         }
+        /*if (PhotonNetwork.IsMasterClient && !startSpawnWave && (TimeBetweenWaves + Wave * 3 - timeToWave) < 0)
+        {
+            SpawnWave();
+        }*/
     }
 
     public void AddPlayer(Player player)
@@ -57,9 +66,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         player.SetID(players.Count - 1);
     }
 
-    public void UpdateHpBarEnemy(Enemy enemy)
+    public void UpdateHpBarEnemy(BaseEnemy enemy)
     {
-        enemy.Alive();
+        enemy.CheckAlive();
     }
 
     public override void OnLeftRoom()
@@ -98,12 +107,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         Wave++;
         for (int i = 0;i < Wave; i++)
         {
-            Invoke("InstEnemy", i);
+            Invoke(nameof(InstantiateEnemy), i);
         }
+        if (Wave == 15)
+            InstantiateBoss();
         timeToWave = 0;
         PV.RPC("SetInfoWave", RpcTarget.AllBuffered, Wave);
         Resurrection();
-        Invoke("SpawnWave", (Wave * 3 + TimeBetweenWaves));
+        //Invoke(nameof(SpawnWave), (Wave + TimeBetweenWaves));
     }
 
     [PunRPC]
@@ -139,20 +150,20 @@ public class GameManager : MonoBehaviourPunCallbacks
             if (players[diePlayersID[i]] != null)
             {
                 PV.RPC("RespawnPositionPlayerPun", RpcTarget.AllBuffered, diePlayersID[i]);
-                players[diePlayersID[i]].Resurrection();
+                players[diePlayersID[i]].Resurrect();
             }
         }
         diePlayersID.Clear();
     }
 
     [PunRPC]
-    public void RespawnPositionPlayerPun(int i)
+    public void RespawnPositionPlayerPun(int i)//Peredelat tochno !!!!!!!
     {
         Vector3 randomPosition = new Vector3(Random.Range(minX, maxX), Random.Range(minY, maxY), 0);
         players[i].transform.position = randomPosition;
     }
 
-    public void InstEnemy()
+    public void InstantiateEnemy()
     {
         if (PhotonNetwork.IsMasterClient)
         {
@@ -161,10 +172,36 @@ public class GameManager : MonoBehaviourPunCallbacks
                 Vector3 EnemyPosition = Spawner[i].transform.position;
                 int RandomIndex = Random.Range(0, EnemyPrefab.Count);
                 GameObject en = PhotonNetwork.InstantiateRoomObject(EnemyPrefab[RandomIndex].name, EnemyPosition, Quaternion.identity);
-                //GameObject en = PhotonNetwork.Instantiate(EnemyGameObject.name, EnemyPosition, Quaternion.identity);
-                Enemy enemy = en.GetComponent<Enemy>();
+                BaseEnemy enemy = en.GetComponent<BaseEnemy>();
                 enemy.LevelUpWave(Wave);
                 enemies.Add(enemy);
+            }
+        }
+    }
+
+    public void InstantiateBoss()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            int RandomIndex = Random.Range(0, Spawner.Count);
+            Vector2 BossPosition = Spawner[RandomIndex].transform.position;
+            GameObject boss = PhotonNetwork.InstantiateRoomObject(BossPrefab[bossIndex].name, BossPosition, Quaternion.identity);
+        }
+    }
+
+
+    public void EnemyDie(BaseEnemy enemy)
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            enemies.Remove(enemy);
+            if (enemies.Count == 0)
+            {
+                if(Wave + TimeBetweenWaves > timeToWave + 10)
+                {
+                    timeToWave = Wave + TimeBetweenWaves + Wave - 10;
+                    PV.RPC("SynchronizingDataWave", RpcTarget.AllBuffered, Wave, timeToWave);
+                }
             }
         }
     }

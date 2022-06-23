@@ -5,15 +5,21 @@ using TMPro;
 
 public class CanvasManager : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject InventoryPanel;
+    [SerializeField]
+    private GameObject GameInterface;
+    [SerializeField]
+    private GameObject ScorePanel;
+    [SerializeField]
+    private TMP_Text TextScore;
+
+    [SerializeField]
+    private InformationUpdate info;
+    [SerializeField]
+    private Store store;
+
     private bool inStore;
-    public GameObject Store;
-    public GameObject GameInterface;
-    public GameObject ScorePanel;
-    public TMP_Text TextScore;
-
-    public InformationUpdate info;
-    public Store store;
-
     private Player myPlayer;
 
     void Start()
@@ -24,7 +30,7 @@ public class CanvasManager : MonoBehaviour
     void Update()
     {
         if (myPlayer == null) { return; }
-        TextScore.text = myPlayer.Score.ToString();
+        TextScore.text = myPlayer.GetScore().ToString();
         if(Input.GetKeyDown(KeyCode.I) || Input.GetKeyDown(KeyCode.Tab))
         {
             Push();
@@ -34,7 +40,8 @@ public class CanvasManager : MonoBehaviour
     public void Push()
     {
         inStore = !inStore;
-        Store.SetActive(inStore);
+        InventoryPanel.SetActive(inStore);
+        store.UpdateTextLevel();
         GameInterface.SetActive(!inStore);
     }
     
